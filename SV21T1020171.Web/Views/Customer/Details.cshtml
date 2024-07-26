@@ -1,0 +1,94 @@
+﻿@model SV21T1020171.DomainModels.Customer
+
+@{
+    ViewBag.Title = "Chi tiết khách hàng";
+}
+
+<style>
+    .centered-container {
+        display: flex;
+        /* justify-content: center; */ /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        /* min-height: 100vh;  */ /* Chiều cao tối thiểu của container bằng chiều cao của viewport */
+    }
+
+    .card {
+        width: 100%; /* Chiếm toàn bộ chiều rộng của container */
+        max-width: 600px; /* Chiều rộng tối đa của card */
+    }
+
+    .table-container {
+        overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá rộng */
+    }
+
+    table {
+        width: 100%; /* Chiếm toàn bộ chiều rộng của container */
+        border-collapse: collapse; /* Gộp các đường viền bảng lại với nhau */
+    }
+
+    th, td {
+        padding: 8px 12px; /* Khoảng đệm trong các ô bảng */
+        border: 1px solid #ddd; /* Đường viền của các ô bảng */
+    }
+
+    th {
+        background-color: #f8f9fa; /* Màu nền cho các tiêu đề cột */
+        font-weight: bold; /* Chữ đậm cho các tiêu đề cột */
+        text-align: left; /* Căn trái cho các tiêu đề cột */
+    }
+</style>
+
+<div class="centered-container">
+    <div class="card shadow-lg border-light">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="card-title mb-0">Chi Tiết Khách Hàng</h2>
+        </div>
+        <div class="card-body table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thông Tin</th>
+                        <th>Chi Tiết</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID Khách hàng</td>
+                        <td>@Model.CustomerID</td>
+                    </tr>
+                    <tr>
+                        <td>Tên khách hàng</td>
+                        <td>@Model.CustomerName </td>
+                    </tr>
+                    <tr>
+                        <td>Tên liên hệ</td>
+                        <td>@Model.ContactName</td>
+                    </tr>
+                    <tr>
+                        <td>Tỉnh thành</td>
+                        <td>@Model.Province</td>
+                    </tr>
+                    <tr>
+                        <td>Địa Chỉ</td>
+                        <td>@Model.Address</td>
+                    </tr>
+                    <tr>
+                        <td>Điện Thoại</td>
+                        <td>@Model.Phone</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@Model.Email</td>
+                    </tr>
+                    <tr>
+                        <td>IsLocked</td>
+                        <td>@Model.IsLocked</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-center">
+            <a asp-action="Index" class="btn btn-secondary">Trở Về</a>
+        </div>
+    </div>
+</div>

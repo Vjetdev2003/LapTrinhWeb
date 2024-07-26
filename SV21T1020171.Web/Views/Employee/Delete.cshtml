@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Xóa nhân viên";
+}
+
+<div class="box box-danger">
+    <div class="box box-body">
+        <form action="~/Shipper/Delete" method="post">
+            <div class="form-group">
+                <label>Tên nhân viên</label>
+                <p class="form-control-static">Lê Đức Dũng</p>
+            </div>
+            <div class="form-group">
+                <label>Ngày sinh</label>
+                <p class="form-control-static">1980-10-09</p>
+
+            </div><div class="form-group">
+                <label>Địa chỉ</label>
+                <p class="form-control-static">13/57 Trần Phú, TP Huế</p>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <p class="form-control-static">0336238660</p>
+
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <p class="form-control-static">leducdung@mycompany.com</p>
+
+            </div>
+
+            <div class="form-group">
+                <label>Is working</label>
+                <p class="form-control-static"></p>
+
+            </div>
+
+            <div class="form-group text-right">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"></i>
+                    Xóa dữ liệu
+                </button>
+                <a href="~/Employee" class="btn btn-default">
+                    Quay lại
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

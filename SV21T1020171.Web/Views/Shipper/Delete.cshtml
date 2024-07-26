@@ -1,0 +1,38 @@
+﻿@model SV21T1020171.DomainModels.Shipper
+
+@{
+    ViewBag.Title = "Xoá thông tin giao hàng";
+}
+
+<div class="margin-top:50px"></div>
+
+
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-light mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-danger text-white text-center">
+            <h2 class="card-title mb-0">Xác Nhận Xoá</h2>
+        </div>
+        <div class="card-body">
+            <p class="text-center">Bạn có muốn xoá thông tin của người giao hàng không?</p>
+            <dl class="row">
+                <dt class="col-sm-4 text-end">Shipper ID</dt>
+                <dd class="col-sm-8">@Model.ShipperID</dd>
+
+                <dt class="col-sm-4 text-end">Shipper Name</dt>
+                <dd class="col-sm-8">@Model.ShipperName</dd>
+
+                <dt class="col-sm-4 text-end">Phone</dt>
+                <dd class="col-sm-8">@Model.Phone</dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" name="id" value="@Model.ShipperID" />
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
