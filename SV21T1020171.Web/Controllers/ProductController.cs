@@ -6,8 +6,7 @@ namespace SV21T1020171.Web.Controllers
     {
         public IActionResult Index()
         {
-            var model = BusinessLayers.ProductDataService.List();
-            return View(model);
+            return View();
         }
         public IActionResult Create()
         {

@@ -1,4 +1,5 @@
-﻿namespace SV21T1020171.DomainModels
+﻿
+namespace SV21T1020171.DomainModels
 {
     /// <summary>
     /// Thông tin về khách hàng
@@ -14,6 +15,9 @@
         public string Email {  get; set; } = string.Empty;
         public bool IsLocked {  get; set; }
 
-
+        public static implicit operator Customer(bool v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

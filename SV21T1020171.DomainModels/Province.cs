@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SV21T1020171.DomainModels
 {
-    public class Provinces
+    public class Province
     {
-        public string ProviceName { get; set; }
+        public string ProvinceName { get; set; }
     }
 }
