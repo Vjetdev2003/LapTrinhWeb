@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SV21T1020171.Web.Models;
 using System.Diagnostics;
+using SV21T1020171.BusinessLayers;
 namespace SV21T1020171.Web.Controllers
 {
     public class HomeController : Controller
@@ -29,7 +30,8 @@ namespace SV21T1020171.Web.Controllers
         }
         public IActionResult Customers() 
         {
-            return View();
+            var model = BusinessLayers.CommonDataService.ListOfCustomers();
+            return View(model);
         }
     }
 }

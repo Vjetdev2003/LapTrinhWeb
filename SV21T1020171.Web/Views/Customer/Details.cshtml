@@ -1,15 +1,15 @@
 ﻿@model SV21T1020171.DomainModels.Customer
 
 @{
-    ViewBag.Title = "Xoá thông tin nhà cung cấp";
+    ViewBag.Title = "Chi tiết khách hàng";
 }
 
 <style>
     .centered-container {
         display: flex;
-        /*  justify-content: center; /* Căn giữa theo chiều ngang */
-        /* align-items: center; /* Căn giữa theo chiều dọc */
-        /*   min-height: 100vh; */ */ */ /* Chiều cao tối thiểu của container bằng chiều cao của viewport */
+        /* justify-content: center; */ /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        /* min-height: 100vh;  */ /* Chiều cao tối thiểu của container bằng chiều cao của viewport */
     }
 
     .card {
@@ -40,8 +40,8 @@
 
 <div class="centered-container">
     <div class="card shadow-lg border-light">
-        <div class="card-header bg-danger text-white text-center">
-            <h2 class="card-title mb-0">Xác nhận xoá</h2>
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="card-title mb-0">Chi Tiết Khách Hàng</h2>
         </div>
         <div class="card-body table-container">
             <table>
@@ -57,11 +57,11 @@
                         <td>@Model.CustomerID</td>
                     </tr>
                     <tr>
-                        <td>Tên Khách hàng</td>
-                        <td>@Model.CustomerName</td>
+                        <td>Tên khách hàng</td>
+                        <td>@Model.CustomerName </td>
                     </tr>
                     <tr>
-                        <td>Tên Người Liên Hệ</td>
+                        <td>Tên liên hệ</td>
                         <td>@Model.ContactName</td>
                     </tr>
                     <tr>
@@ -88,11 +88,7 @@
             </table>
         </div>
         <div class="card-footer text-center">
-            <form asp-action="DeleteConfirmed" method="post">
-                <input type="hidden" name="id" value="@Model.CustomerID" />
-                <button type="submit" class="btn btn-danger">Xóa</button>
-                <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
-            </form>
+            <a asp-action="Index" class="btn btn-secondary">Trở Về</a>
         </div>
     </div>
 </div>

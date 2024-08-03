@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - YourAppName</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                integrity="sha384-tsQFqpERtEvlIyTItrrCBfWJyE0m6IL1yyFYW53PrxcVWLYGh9A5dkaZCIYOx9Pu"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                integrity="sha384-pjaaA8dDz/3gdWYZf3U6XbJUZ6Bbo/y4lO/audsBqfBlbvvB4p3dVS0Lt5uNE2vh"
+                crossorigin="anonymous"></script>
+    </environment>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="container">
+                <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+                    <a class="navbar-brand" href="/">Supplier</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Supplier">Suppliers</a>
+                            </li>
+                            <!-- Add more nav items as needed -->
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Supplier - <a href="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

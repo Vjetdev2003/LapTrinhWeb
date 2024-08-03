@@ -19,11 +19,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-string connectionString = @"server=.;
-                                        user id=sa;
-                                        password=sa;
-                                        database=LiteCommerceDB;
-                                        TrustServerCertificate=true";
-SV21T1020171.BusinessLayers.Configuration.Initialize(connectionString);
 
 app.Run();
