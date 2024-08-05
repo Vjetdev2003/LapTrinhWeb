@@ -72,7 +72,7 @@ namespace SV21T1020171.Web.Controllers
             var customer = CommonDataService.GetCustomer(id);
             if(customer == null)
                 return RedirectToAction("Index");
-            ViewBag.AllowDelete = CommonDataService.IsUsedCustomer(id);
+            ViewBag.AllowDelete =!CommonDataService.IsUsedCustomer(id);
             return View(customer);
         }
     }

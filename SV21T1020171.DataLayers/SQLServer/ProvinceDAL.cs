@@ -31,7 +31,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             throw new NotImplementedException();
         }
 
-        public bool InUsed(int id)
+        public bool IsUsed(int id)
         {
             throw new NotImplementedException();
         }
@@ -39,10 +39,10 @@ namespace SV21T1020171.DataLayers.SQLServer
         public IList<Province> List(int page = 1, int pagesize = 10, string searchValue = "")
         {
             List<Province> data = new List<Province>();
-            using(var connection =  OpenConnection())
+            using (var connection = OpenConnection())
             {
                 var sql = @"SELECT * FROM Provinces";
-                data =connection.Query<Province>(sql:sql,commandType:CommandType.Text).ToList();
+                data = connection.Query<Province>(sql: sql, commandType: CommandType.Text).ToList();
                 connection.Close();
             }
 
@@ -50,6 +50,11 @@ namespace SV21T1020171.DataLayers.SQLServer
         }
 
         public bool Update(Province data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Supplier data)
         {
             throw new NotImplementedException();
         }

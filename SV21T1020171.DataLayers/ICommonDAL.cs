@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SV21T1020171.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,7 @@ namespace SV21T1020171.DataLayers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool InUsed(int id);
+        bool IsUsed(int id);
+        
     }
 }

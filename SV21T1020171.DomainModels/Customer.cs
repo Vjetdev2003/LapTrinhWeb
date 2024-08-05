@@ -15,9 +15,6 @@ namespace SV21T1020171.DomainModels
         public string Email {  get; set; } = string.Empty;
         public bool IsLocked {  get; set; }
 
-        public static implicit operator Customer(bool v)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

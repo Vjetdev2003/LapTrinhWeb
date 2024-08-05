@@ -4,45 +4,55 @@
 
 <div class="box box-danger">
     <div class="box box-body">
-        <form action="~/Shipper/Delete" method="post">
+        <form action="~/Employee/Delete" method="post">
             <div class="form-group">
                 <label>Tên nhân viên</label>
-                <p class="form-control-static">Lê Đức Dũng</p>
+                <p class="form-control-static">@Model.FullName</p>
             </div>
             <div class="form-group">
                 <label>Ngày sinh</label>
-                <p class="form-control-static">1980-10-09</p>
+                <p class="form-control-static">@Model.BirthDate</p>
 
             </div><div class="form-group">
                 <label>Địa chỉ</label>
-                <p class="form-control-static">13/57 Trần Phú, TP Huế</p>
+                <p class="form-control-static">@Model.Address</p>
             </div>
             <div class="form-group">
                 <label>Số điện thoại</label>
-                <p class="form-control-static">0336238660</p>
+                <p class="form-control-static">@Model.Phone</p>
 
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <p class="form-control-static">leducdung@mycompany.com</p>
+                <p class="form-control-static">@Model.Email</p>
 
             </div>
 
             <div class="form-group">
-                <label>Is working</label>
-                <p class="form-control-static"></p>
+                <label>Trạng thái</label>
+                <p class="form-control-static">@(Model.IsWorking ? "Đang làm việc" : "Đã nghỉ việc")</p>
 
             </div>
-
             <div class="form-group text-right">
-                <button type="submit" class="btn btn-danger">
-                    <i class="fa fa-trash"></i>
-                    Xóa dữ liệu
-                </button>
+                @if (ViewBag.AllowDelete)
+                {
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                        Xóa dữ liệu
+                    </button>
+                }
+                else
+                {
+                    <span style="color: red">Không được phép xóa nhân viên này </span>
+                }
+
+
                 <a href="~/Employee" class="btn btn-default">
                     Quay lại
                 </a>
             </div>
+
+          
         </form>
     </div>
 </div>

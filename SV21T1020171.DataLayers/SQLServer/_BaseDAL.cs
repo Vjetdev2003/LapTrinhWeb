@@ -15,7 +15,7 @@ namespace SV21T1020171.DataLayers.SQLServer
         protected string _connectionString = "";
         public _BaseDAL(string connectionString) {
             _connectionString = connectionString;
-                }
+        }
         protected SqlConnection OpenConnection()
         {
             SqlConnection connection = new SqlConnection(_connectionString);

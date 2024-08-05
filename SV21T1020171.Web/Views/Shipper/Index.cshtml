@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Thông tin người giao hàng";
+    ViewBag.Title = "Thông tin các bên giao hàng";
 }
 
 <div class="box box-primary">
@@ -12,10 +12,10 @@
 
     <form id="formSearch" action="~/Shipper" method="get">
         <div class="input-group">
-            <input name="searchValue">
+            <input name="searchValue"
                    type="text"
                    class="form-control"
-                   placeholder="Nhập tên khách hàng cần tìm"
+                   placeholder="Nhập tên giao hàng cần tìm"
                    autofocus />
             <div class="input-group-btn">
                 <button class="btn btn-info" type="submit">
@@ -27,61 +27,58 @@
             </div>
         </div>
     </form>
-    <h>Có <strong>@ViewBag.TotalShippers</strong> người giao hàng trong tổng số <strong>@ViewBag.TotalPages</strong> trang</h>
-  <div> 
-    <table class="table table table-bordered table-hover table-striped">
-        <thead>
-            <tr class="bg-primary">
-               
-                <th>
-                    @Html.DisplayNameFor(model => model.ShipperName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Phone)
-                </th>
-                <th>
-                    Actions
-                </th>
-                   
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var shipper in Model)
-            {
-                <tr >
-                   
-                    <td>@shipper.ShipperName</td>
-                    <td>@shipper.Phone</td>
-                   
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@shipper.ShipperID" class="btn btn-primary btn-sm">Edit</a>
-                        <a asp-action="Details" asp-route-id="@shipper.ShipperID" class="btn btn-info btn-sm">Details</a>
-                        <a asp-action="Delete" asp-route-id="@shipper.ShipperID" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
+    <p>Có <strong>@ViewBag.RowCount</strong> giao hàng trong tổng số <strong>@ViewBag.PageCount</strong> trang</p>
+    <div>
+        <table class="table table-bordered table-hover table-striped ">
+            <thead>
+                <tr class="bg-primary">
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.ShipperName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var shipper in Model)
+                {
+                    <tr>
+
+                        <td>@shipper.ShipperName</td>
+                        <td>@shipper.Phone</td>
+                        
+                        <td class="text-right">
+                            <a href="~/Shipper/Edit/@shipper.ShipperID " class="btn btn-xs btn-info">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="~/Shipper/Delete/@shipper.ShipperID " class="btn btn-xs btn-danger">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
         <div class="text-center">
             <ul class="pagination">
-                <li><a href="#">1</a></li>
+                @for (int p = 1; p <= ViewBag.PageCount; p++)
+                {
+                    if (p == ViewBag.Page)
+                    {
+                        <li class="active">
+                            <a href="#">@p</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li> <a href="~/Customer?page=@p&searchValue=@ViewBag.SearchValue">@p</a></li>
+                    }
+                }
             </ul>
         </div>
     </div>
-    <script>
-        var total = @ViewBag.TotalPages
-                            const ulElement = document.querySelector('.pagination');
-        if (total > 1) {
-        for (let i = 1; i <= total; i++) {
-            const liElement = document.createElement('li');
-            const aElement = document.createElement('a');
-            aElement.href = "#";
-            aElement.textContent = i;
 
-            liElement.appendChild(aElement);
-            ulElement.appendChild(liElement);
-        }else{
-                <li><a href="#" > 1 < /a></li >
-        }
-        }
-    </script>

@@ -12,5 +12,10 @@ namespace SV21T1020171.DomainModels
         public string ProductName { get; set; }
         public string Unit { get; set; }
         public double Price { get; set; }
+
+        public static implicit operator Product(bool v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

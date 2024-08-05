@@ -1,38 +1,39 @@
-﻿@model SV21T1020171.DomainModels.Shipper
-
+﻿@model Shipper
 @{
-    ViewBag.Title = "Xoá thông tin giao hàng";
+    ViewBag.Title = "Xóa bên giao hàng";
 }
+<div class="box box-danger">
+    <div class="box box-body">
+        <form action="~/Shipper/Delete/@Model.ShipperID" method="post">
+            <div class="form-group">
+                <label>Tên bên giao hàng</label>
+                <p class="form-control-static">@Model.ShipperName</p>
+            </div>
+            <div class="form-group">
+                <label>Điện Thoại</label>
+                <p class="form-control-static">@Model.Phone</p>
 
-<div class="margin-top:50px"></div>
+            </div>
 
 
+            <div class="form-group text-right">
+                @if (ViewBag.AllowDelete)
+                {
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                        Xóa dữ liệu
+                    </button>
+                }
+                else
+                {
+                    <span style="color: red">Không được phép xóa bên giao hàng này </span>
+                }
 
-<div class="container mt-5">
 
-    <div class="card shadow-lg border-light mx-auto" style="max-width: 600px;">
-        <div class="card-header bg-danger text-white text-center">
-            <h2 class="card-title mb-0">Xác Nhận Xoá</h2>
-        </div>
-        <div class="card-body">
-            <p class="text-center">Bạn có muốn xoá thông tin của người giao hàng không?</p>
-            <dl class="row">
-                <dt class="col-sm-4 text-end">Shipper ID</dt>
-                <dd class="col-sm-8">@Model.ShipperID</dd>
-
-                <dt class="col-sm-4 text-end">Shipper Name</dt>
-                <dd class="col-sm-8">@Model.ShipperName</dd>
-
-                <dt class="col-sm-4 text-end">Phone</dt>
-                <dd class="col-sm-8">@Model.Phone</dd>
-            </dl>
-        </div>
-        <div class="card-footer text-center">
-            <form asp-action="DeleteConfirmed" method="post">
-                <input type="hidden" name="id" value="@Model.ShipperID" />
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </form>
-        </div>
+                <a href="~/Shipper" class="btn btn-default">
+                    Quay lại
+                </a>
+            </div>
+        </form>
     </div>
 </div>

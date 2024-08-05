@@ -1,19 +1,20 @@
-﻿@{
-    ViewBag.Title = "Cập nhật loại hàng";
+﻿@model Category
+@{
+    ViewBag.Title = "Cập nhật thông tin loại hàng";
 }
-
 <div class="box box-danger">
     <div class="box box-body">
-        <form action="~/Category/Edit" method="post">
+        <form action="~/Category/Save" method="post">
+            <input type="hidden" name="@nameof(Model.CategoryId)" value="@Model.CategoryId" />
             <div class="form-group">
                 <label>Tên loại hàng</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control " name="@nameof(Model.CategoryName)" value="@Model.CategoryName">
             </div>
             <div class="form-group">
                 <label>Mô tả</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="@nameof(Model.Description)" value="@Model.Description">
             </div>
-
+          
             <div class="form-group text-right">
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-save "></i>
@@ -26,5 +27,3 @@
         </form>
     </div>
 </div>
-
-

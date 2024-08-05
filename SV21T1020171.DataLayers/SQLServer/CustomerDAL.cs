@@ -6,14 +6,15 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SV21T1020171.DataLayers.SQLServer
 {
     public class CustomerDAL : _BaseDAL, ICommonDAL<Customer>
     {
+        
         public CustomerDAL(string connectionString) : base(connectionString)
         {
+           
         }
 
         public int Add(Customer data)
@@ -87,13 +88,13 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public bool InUsed(int id)
+        public bool IsUsed(int id)
         {
             bool result = false;
             using (var connection = OpenConnection())
             {
 
-                var sql = @"IF EXISTS (SELECT * FROM Customers WHERE CustomerId = @CustomerId)
+                var sql = @"IF EXISTS (SELECT * FROM Orders WHERE CustomerId = @CustomerId)
                                  SELECT 1
                              ELSE 
                                   SELECT 0 ";
@@ -101,7 +102,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                 {
                     CustomerId = id
                 };
-                result = connection.ExecuteScalar<bool>(sql:sql,param:parametes,commandType:CommandType.Text);
+                result = connection.ExecuteScalar<int>(sql:sql,param:parametes,commandType:CommandType.Text)>0;
                 connection.Close();
             }
             return result;
@@ -145,22 +146,25 @@ namespace SV21T1020171.DataLayers.SQLServer
                     Phone =@Phone,
                     Email=@Email,
                     IsLocked=@IsLocked
-                    WHERE CustomerId=@CustomerId";
+                    WHERE CustomerID=@CustomerID";
                 var parameters = new
                 {
-                    CustomerName = data.CustomerName ?? "",
+                    CustomerName = data.ContactName ?? "",
                     ContactName = data.ContactName ?? "",
                     Province = data.Province ?? "",
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
                     IsLocked = data.IsLocked,
+                    CustomerID=data.CustomerID
                 };
-                data = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
                 connection.Close ();
             }
             return result;
 
         }
+
+       
     }
 }
