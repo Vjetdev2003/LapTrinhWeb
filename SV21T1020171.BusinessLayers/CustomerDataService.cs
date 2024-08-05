@@ -1,15 +1,17 @@
-﻿using System;
-using SV21T1020171.DataLayers;
+﻿using SV21T1020171.DataLayers;
 using SV21T1020171.DomainModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SV21T1020171.BusinessLayers
 {
-    public static class CommonDataService
+    public class CustomerDataService
     {
         private static readonly CustomerDAL customerDB;
-        private static readonly SupplierDAL supplierDAL;
-        //Constructor static khoong dc co tham so
-        static CommonDataService()
+        static CustomerDataService()
         {
             string connnectionString = @"server=.;
                                         user id=sa;
@@ -17,7 +19,6 @@ namespace SV21T1020171.BusinessLayers
                                         database=LiteCommerceDB;
                                         TrustServerCertificate=true";
             customerDB = new CustomerDAL(connnectionString);
-            supplierDAL = new SupplierDAL(connnectionString);
         }
         /// <summary>
         /// Lấy danh sách khách hàng
@@ -28,8 +29,14 @@ namespace SV21T1020171.BusinessLayers
 
             return customerDB.List();
         }
-        public static List<Supplier> ListOfSuppliers() {
-            return supplierDAL.List();
+        public static Customer CustomerDetail(int id)
+        {
+            return customerDB.CustomerDetail(id);
         }
+        public static void Delete(int id)
+        {
+            customerDB.Delete(id);
+        }
+
     }
 }

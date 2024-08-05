@@ -27,7 +27,7 @@
             </div>
         </div>
     </form>
-    <p>Có <strong>@ViewBag.RowCount</strong> khách hàng trong tổng số <strong>@ViewBag.PageCount</strong> trang</p>
+    <p>Có <strong>@ViewBag.ToTalCustomers</strong> khách hàng trong tổng số <strong>@ViewBag.TotalPages</strong> trang</p>
 <div>
         <table class="table table-bordered table-hover table-striped ">
     <thead>
@@ -69,34 +69,33 @@
                     <td>@customer.Phone</td>
                     <td>@customer.Email</td>
                     <td>@customer.IsLocked</td>
-                    <td class="text-right">
-                        <a href="~/Customer/Edit/@customer.CustomerID " class="btn btn-xs btn-info">
-                            <i class="fa fa-edit"></i></a>
-                            <a href="~/Customer/Delete/@customer.CustomerID " class="btn btn-xs btn-danger">
-                                <i class="fa fa-trash"></i>
-                            </a>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@customer.CustomerID" class="btn btn-primary btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@customer.CustomerID" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Delete" asp-route-id="@customer.CustomerID" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
                
     </tbody>
 </table>
-<div class="text-center">
-    <ul class="pagination">
-                @for(int p = 1; p <= ViewBag.PageCount; p++)
-                {
-                    if (p == ViewBag.Page)
-                    {
-                        <li class="active">
-                            <a href="#">@p</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li> <a href="~/Customer?page=@p&searchValue=@ViewBag.SearchValue"></a></li>
-                    }
-                }
+        <div class="text-center">
+            <ul class="pagination">
+                <li><a href="#">0</a></li>
             </ul>
+        </div>
 </div>
-</div>
-   
+    <script>
+        var total = @ViewBag.TotalPages
+                    const ulElement = document.querySelector('.pagination');
+
+        for (let i = 1; i <= total; i++) {
+            const liElement = document.createElement('li');
+            const aElement = document.createElement('a');
+            aElement.href = "#";
+            aElement.textContent = i;
+
+            liElement.appendChild(aElement);
+            ulElement.appendChild(liElement);
+        }
+    </script>

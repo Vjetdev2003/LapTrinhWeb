@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SV21T1020171.BusinessLayers;
 using SV21T1020171.DomainModels;
 using SV21T1020171.DataLayers;
 
@@ -10,7 +11,16 @@ namespace SV21T1020171.Web.Controllers
 
         public IActionResult Index(int page=1,int pageSize=10)
         {
-            return View();
+            
+            var model = BusinessLayers.ShipperDataService.ListOfShipper();
+            var shippers = ShipperDataService.ListOfShipper();
+            int totalShippers = shippers.Count();
+            int totalPages = (int)Math.Ceiling((double)totalShippers / pageSize);
+
+            ViewBag.TotalShippers = totalShippers;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            return View(model);
         }
         public IActionResult Create()
         {
@@ -21,13 +31,23 @@ namespace SV21T1020171.Web.Controllers
         {
             return View();
         }
+        [HttpGet, ActionName("Details")]
         public IActionResult Detail(int id)
         {
-           
-            return View();
+            var modelSearch = BusinessLayers.ShipperDataService.Detail(id);
+            return View("Details", modelSearch);
         }
-        public IActionResult Delete(int id) { 
-            return View();
+        public IActionResult Delete(int id)
+        {
+
+            var shipper = BusinessLayers.ShipperDataService.Detail(id);
+            if (shipper == null)
+            {
+                TempData["ErrorMessage"] = "Shipper not found.";
+                return RedirectToAction("Index");
+            }
+
+            return View(shipper);
         }
 
     }

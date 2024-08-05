@@ -4,32 +4,40 @@ using SV21T1020171.DomainModels;
 
 namespace SV21T1020171.BusinessLayers
 {
-    public static class CommonDataService
+    public static class ShipperDataService
     {
-        private static readonly CustomerDAL customerDB;
-        private static readonly SupplierDAL supplierDAL;
+        private static readonly ShipperDAL shipperDB;
         //Constructor static khoong dc co tham so
-        static CommonDataService()
+        static ShipperDataService()
         {
             string connnectionString = @"server=.;
                                         user id=sa;
                                         password=sa;
                                         database=LiteCommerceDB;
                                         TrustServerCertificate=true";
-            customerDB = new CustomerDAL(connnectionString);
-            supplierDAL = new SupplierDAL(connnectionString);
+            shipperDB = new ShipperDAL(connnectionString);
         }
         /// <summary>
         /// Lấy danh sách khách hàng
         /// </summary>
         /// <returns></returns>
-        public static List<Customer> ListOfCustomers()
+        public static List<Shipper> ListOfShipper()
         {
 
-            return customerDB.List();
+            return shipperDB.List();
         }
-        public static List<Supplier> ListOfSuppliers() {
-            return supplierDAL.List();
+        public static int CreateShipper(Shipper shipper)
+        {
+            return shipperDB.Create(shipper);
         }
+        public static Shipper Detail(int id)
+        {
+            return shipperDB.Detail(id);
+        }
+        public static bool DeleteShipper(int id)
+        {
+            return shipperDB.Delete(id);
+        }
+
     }
 }

@@ -1,79 +1,61 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SV21T1020171.BusinessLayers;
-using SV21T1020171.DomainModels;
-using System.Buffers;
 
 namespace SV21T1020171.Web.Controllers
 {
     public class CustomerController : Controller
     {
-        const int PAGE_SIZE = 20;
-        public IActionResult Index(int page=1,string searchValue = "")
+        public IActionResult Index(int page=1,int pageSize=10)
         {
-            int rowCount = 0;
-            var data = CommonDataService.ListofCustomers(out rowCount, page, PAGE_SIZE, searchValue ?? "");
-            int pageCount = 1;
-            pageCount = rowCount/PAGE_SIZE;
-            if (rowCount % PAGE_SIZE > 0)
-                pageCount += 1;
-            ViewBag.Page = page;
-            ViewBag.RowCount=rowCount;
-            ViewBag.PageCount=pageCount;
-            ViewBag.SearchValue=searchValue;
-            
-            return View(data);
+            var model = BusinessLayers.CustomerDataService.ListOfCustomers();
+         
+            var customers = CustomerDataService.ListOfCustomers();
+            int totalCustomers = customers.Count();
+            int totalPages = (int)Math.Ceiling((double)totalCustomers / pageSize);
+
+            ViewBag.totalCustomers = totalCustomers;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.CurrentPage = page;
+            return View(model);
         }
         public IActionResult Create() {
-            ViewBag.Title = "Tạo mới thông tin khách hàng";
-
-            Customer customer = new Customer()
-            {
-                CustomerID = 0
-            };
-            return View("Edit",customer);
+            ViewBag.Title = "Bổ sung khách hàng";
+            return View("Edit");
         }
         public IActionResult Edit(int id = 0) {
             ViewBag.Title = "Cập nhật thông tin khách hàng";
-            Customer? customer =CommonDataService.GetCustomer(id);
-
-            if (customer == null)
-                return RedirectToAction("Index");
-            return View(customer);
+            return View();
         }
         /// <summary>
         /// Xem thông tin chi tiết khách hàng
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
-        public IActionResult Save(Customer data)
+        /// 
+        [HttpGet,ActionName("Details")]
+        public IActionResult Detail(int id) {
+            var detail = BusinessLayers.CustomerDataService.CustomerDetail(id);
+            return View("Details", detail);
+           }
+            /// <summary>
+            /// Xoá Khách hàng
+            /// </summary>
+            /// <param name="id"></param>
+            /// <returns></returns>
+        public IActionResult Delete(int id)
         {
-            //TODO:Ktra dữ liệu đầu vào có hợp lệ hay không
-            if(data.CustomerID == 0)
+            var model = CustomerDataService.CustomerDetail(id);
+            if (model == null)
             {
-                CommonDataService.AddCustomer(data);
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            else
-            {
-                CommonDataService.UpdateCustomer(data);
-
-            }
-            return RedirectToAction("Index");
+            return View(model);
         }
-        public IActionResult Delete(int id = 0)
-        {//Nếu lời gọi là POST Thì ta thực hiện xoá 
-            ViewBag.Title = "Xoá thông tin khách hàng";
-            if (Request.Method == "POST") { 
-                CommonDataService.DeleteCustomer(id);
-                return RedirectToAction("Index");
-            }
-            //nếu lời gọi là GET Thì hiển thị khách hàng cần xoá
-            var customer = CommonDataService.GetCustomer(id);
-            if(customer == null)
-                return RedirectToAction("Index");
-            ViewBag.AllowDelete = CommonDataService.IsUsedCustomer(id);
-            return View(customer);
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            CustomerDataService.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
