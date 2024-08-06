@@ -11,7 +11,7 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
-            var data = CommonDataService.ListofEmployees(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListofSuppliers(out rowCount, page, PAGE_SIZE, searchValue ?? "");
             int pageCount = 1;
             pageCount = rowCount / PAGE_SIZE;
             if (rowCount % PAGE_SIZE > 0)
@@ -27,35 +27,35 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.Title = "Tạo mới nhân viên";
-            Employee employee = new Employee()
+            Supplier supplier = new Supplier()
             {
-                EmployeeID = 0
+                SupplierID = 0
             };
-            return View("Edit",employee);
+            return View("Edit",supplier);
         }
       
        
         public IActionResult Edit(int id=0)
         {
             ViewBag.Title = "Cập nhật nhà cung cấp";
-            Employee? employee = CommonDataService.GetEmployee(id);
+            Supplier? supplier = CommonDataService.GetSupplier(id);
                     
-            if (employee == null)
+            if (supplier == null)
                 return RedirectToAction("Index");
-            return View(employee);
+            return View(supplier);
         }
         [HttpPost]
-        public IActionResult Save(Employee data)
+        public IActionResult Save(Supplier data)
         {
             //TODO:Ktra dữ liệu đầu vào có hợp lệ hay không
-            if (data.EmployeeID == 0)
+            if (data.SupplierID == 0)
             {
-                CommonDataService.AddEmployee(data);
+                CommonDataService.AddSupplier(data);
                 return RedirectToAction("Index");
             }
             else
             {
-                CommonDataService.UpdateEmployee(data);
+                CommonDataService.UpdateSupplier(data);
 
             }
             return RedirectToAction("Index");
@@ -65,15 +65,15 @@ namespace SV21T1020171.Web.Controllers
             ViewBag.Title = "Xoá thông tin khách hàng";
             if (Request.Method == "POST")
             {
-                CommonDataService.DeleteEmployee(id);
+                CommonDataService.DeleteSupplier(id);
                 return RedirectToAction("Index");
             }
             //nếu lời gọi là GET Thì hiển thị khách hàng cần xoá
-            var employee = CommonDataService.GetEmployee(id);
-            if (employee == null)
+            var supplier = CommonDataService.GetSupplier(id);
+            if (supplier == null)
                 return RedirectToAction("Index");
-            ViewBag.AllowDelete = !CommonDataService.IsUsedEmployee(id);
-            return View(employee);
+            ViewBag.AllowDelete = !CommonDataService.IsUsedSupplier(id);
+            return View(supplier);
         }
 
     }
