@@ -22,7 +22,6 @@ namespace SV21T1020171.Web.Controllers
                 Data = data
 
             };
-
             return View(model);
 
         }

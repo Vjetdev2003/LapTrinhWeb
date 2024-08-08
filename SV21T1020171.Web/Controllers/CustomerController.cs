@@ -23,9 +23,7 @@ namespace SV21T1020171.Web.Controllers
                 PageSize = PAGE_SZE,
                 Data = data
             };
-
-
-
+            
             return View(model);
         }
         public IActionResult Create()
