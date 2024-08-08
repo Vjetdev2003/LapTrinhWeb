@@ -26,7 +26,7 @@ namespace SV21T1020171.Web.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Title = "Tạo mới nhân viên";
+            ViewBag.Title = "Bổ sung nhân viên";
             Supplier supplier = new Supplier()
             {
                 SupplierID = 0

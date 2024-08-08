@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SV21T1020171.DomainModels.Shipper>
+﻿@model SV21T1020171.Web.Models.ShipperSearchResult
 
 @{
     ViewData["Title"] = "Index";
@@ -12,7 +12,7 @@
 
     <form id="formSearch" action="~/Shipper" method="get">
         <div class="input-group">
-            <input name="searchValue"
+            <input name="searchValue" value="@Model.SearchValue"
                    type="text"
                    class="form-control"
                    placeholder="Nhập tên giao hàng cần tìm"
@@ -27,23 +27,23 @@
             </div>
         </div>
     </form>
-    <p>Có <strong>@ViewBag.RowCount</strong> giao hàng trong tổng số <strong>@ViewBag.PageCount</strong> trang</p>
+    <p>Có <strong>@Model.RowCount</strong> giao hàng trong tổng số <strong>@Model.PageCount</strong> trang</p>
     <div>
         <table class="table table-bordered table-hover table-striped ">
             <thead>
                 <tr class="bg-primary">
 
                     <th>
-                        @Html.DisplayNameFor(model => model.ShipperName)
+                        Tên giao hàng
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Phone)
+                        Điện thoại
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var shipper in Model)
+                @foreach (var shipper in Model.Data)
                 {
                     <tr>
 
@@ -65,9 +65,9 @@
         </table>
         <div class="text-center">
             <ul class="pagination">
-                @for (int p = 1; p <= ViewBag.PageCount; p++)
+                @for (int p = 1; p <= Model.PageCount; p++)
                 {
-                    if (p == ViewBag.Page)
+                    if (p == Model.Page)
                     {
                         <li class="active">
                             <a href="#">@p</a>
@@ -75,7 +75,7 @@
                     }
                     else
                     {
-                        <li> <a href="~/Customer?page=@p&searchValue=@ViewBag.SearchValue">@p</a></li>
+                        <li> <a href="~/Shipper?page=@p&searchValue=@Model.SearchValue">@p</a></li>
                     }
                 }
             </ul>

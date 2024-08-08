@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SV21T1020171.DomainModels.Customer>
+﻿@model SV21T1020171.Web.Models.CustomerSearchResult
 
 @{
     ViewData["Title"] = "Index";
@@ -12,7 +12,7 @@
 
     <form id="formSearch" action="~/Customer" method="get">
         <div class="input-group">
-            <input name="searchValue"
+            <input name="searchValue" value="@Model.SearchValue"
                    type="text"
                    class="form-control"
                    placeholder="Nhập tên khách hàng cần tìm"
@@ -27,38 +27,37 @@
             </div>
         </div>
     </form>
-    <p>Có <strong>@ViewBag.RowCount</strong> khách hàng trong tổng số <strong>@ViewBag.PageCount</strong> trang</p>
+    <p>Có <strong>@Model.RowCount</strong> khách hàng trong tổng số <strong>@Model.PageCount</strong> trang</p>
 <div>
         <table class="table table-bordered table-hover table-striped ">
     <thead>
         <tr class="bg-primary">
-           
             <th>
-                @Html.DisplayNameFor(model => model.CustomerName)
+                Tên khách hàng
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ContactName)
+                Tên giao dịch
+            </th>
+                    <th>
+                        Điện thoại
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Địa chỉ
+                    </th>
+            <th>
+                Tỉnh/Thành
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Province)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsLocked)
+               Bị Khoá?
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-            @foreach (var customer in Model)
+            @foreach (var customer in Model.Data)
             {
                 <tr>
                     
@@ -83,9 +82,9 @@
 </table>
 <div class="text-center">
     <ul class="pagination">
-                @for(int p = 1; p <= ViewBag.PageCount; p++)
+                @for(int p = 1; p <= Model.PageCount; p++)
                 {
-                    if (p == ViewBag.Page)
+                    if (p == Model.Page)
                     {
                         <li class="active">
                             <a href="#">@p</a>
@@ -93,7 +92,7 @@
                     }
                     else
                     {
-                        <li> <a href="~/Customer?page=@p&searchValue=@ViewBag.SearchValue">@p</a></li>
+                        <li> <a href="~/Customer?page=@p&searchValue=@Model.SearchValue">@p</a></li>
                     }
                 }
             </ul>
