@@ -52,7 +52,7 @@ namespace SV21T1020171.Web.Controllers
         {
             ViewBag.Title = data.ShipperID == 0 ? "Bổ sung người giao hàng" : "Cập nhật thông tin giao hàng";
             if (string.IsNullOrEmpty(data.ShipperName))
-                ModelState.AddModelError(nameof(data.ShipperName), "Tên người giao hàng không được để trống");
+                ModelState.AddModelError(nameof(data.ShipperName), "Tên giao hàng không được để trống");
             data.Phone =data.Phone?? "";
             if (!ModelState.IsValid) { 
                 return View("Edit",data);
