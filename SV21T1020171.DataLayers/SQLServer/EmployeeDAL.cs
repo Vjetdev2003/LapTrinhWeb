@@ -90,7 +90,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public bool IsUsed(int id)
+        public bool InUsed(int id)
         {
             bool result = false;
             using (var connection = OpenConnection())

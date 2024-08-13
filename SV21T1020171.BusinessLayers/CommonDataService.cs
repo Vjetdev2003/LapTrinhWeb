@@ -14,7 +14,6 @@ namespace SV21T1020171.BusinessLayers
     {
         static readonly ICommonDAL<Province> provinceDB;
         static readonly ICommonDAL<Customer> customerDB;
-        static readonly ICommonDAL<Product> productDB;
         static readonly ICommonDAL<Supplier> supplierDB;
         static readonly ICommonDAL<Category> categoryDB;
         static readonly ICommonDAL<Shipper> shipperDB;
@@ -26,7 +25,6 @@ namespace SV21T1020171.BusinessLayers
         {
             provinceDB = new DataLayers.SQLServer.ProvinceDAL(Configuration.ConnectionString);
             customerDB = new DataLayers.SQLServer.CustomerDAL(Configuration.ConnectionString);
-            productDB = new DataLayers.SQLServer.ProductDAL(Configuration.ConnectionString);
             supplierDB = new DataLayers.SQLServer.SupplierDAL(Configuration.ConnectionString);
             categoryDB = new DataLayers.SQLServer.CategoryDAL(Configuration.ConnectionString);
             shipperDB =new DataLayers.SQLServer.ShipperDAL(Configuration.ConnectionString);
@@ -46,11 +44,11 @@ namespace SV21T1020171.BusinessLayers
         /// <param name="pageSize"></param>
         /// <param name="searchValue"></param>
         /// <returns></returns>
-        public static List<Customer> ListofCustomers(out int rowCount, int page = 1, int pageSize = 0,string searchValue="") {
+        public static List<Customer> ListOfCustomers(out int rowCount, int page = 1, int pageSize = 0,string searchValue="") {
             rowCount = customerDB.Count(searchValue);
             return customerDB.List(page, pageSize, searchValue).ToList();
         }
-        public static List<Customer> ListofCustomer(string searchValue = "")
+        public static List<Customer> ListOfCustomers(string searchValue = "")
         {
             return customerDB.List(1,0,searchValue).ToList();
         }
@@ -101,8 +99,8 @@ namespace SV21T1020171.BusinessLayers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static bool IsUsedCustomer(int id) { 
-         return customerDB.IsUsed(id);
+        public static bool InUsedCustomer(int id) { 
+         return customerDB.InUsed(id);
         }
         /// <summary>
         /// Danh sách sản phẩm
@@ -112,18 +110,13 @@ namespace SV21T1020171.BusinessLayers
         /// <param name="pageSize"></param>
         /// <param name="searchValue"></param>
         /// <returns></returns>
-        public static List<Product>ListofProducts(out int rowCount , int page=1,int pageSize =0,string searchValue= "")
-        {
-            rowCount=productDB.Count(searchValue);
-            return productDB.List(page, pageSize, searchValue).ToList();
-        }
-
-        public static List<Supplier>ListofSuppliers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+       
+        public static List<Supplier>ListOfSuppliers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = supplierDB.Count(searchValue);
             return supplierDB.List(page, pageSize,searchValue).ToList();
         }
-        public static List<Supplier>ListofSupplier (string searchValue = "")
+        public static List<Supplier>ListOfSuppliers (string searchValue = "")
         {
             return supplierDB.List(1, 0, searchValue).ToList();
         }
@@ -145,9 +138,9 @@ namespace SV21T1020171.BusinessLayers
         {
             return supplierDB.Delete(id);
         }
-        public static bool IsUsedSupplier(int id)
+        public static bool InUsedSupplier(int id)
         {
-            return supplierDB.IsUsed(id);
+            return supplierDB.InUsed(id);
         }
 
         /// <summary>
@@ -158,12 +151,13 @@ namespace SV21T1020171.BusinessLayers
         /// <param name="pageSize"></param>
         /// <param name="searchValue"></param>
         /// <returns></returns>
-        public static List<Category> ListofCategories(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+        public static List<Category> ListOfCategories(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = categoryDB.Count(searchValue);
             return categoryDB.List(page, pageSize, searchValue).ToList();
         }
-        public static List<Category> ListofCategory(string searchValue = "")
+
+        public static List<Category> ListOfCategories(string searchValue = "")
         {
             return categoryDB.List(1, 0, searchValue).ToList();
         }
@@ -186,9 +180,9 @@ namespace SV21T1020171.BusinessLayers
         {
             return categoryDB.Delete(id);
         }
-        public static bool IsUsedCategory(int id)
+        public static bool InUsedCategory(int id)
         {
-            return categoryDB.IsUsed(id);
+            return categoryDB.InUsed(id);
         }
         /// <summary>
         /// Shipper
@@ -198,12 +192,12 @@ namespace SV21T1020171.BusinessLayers
         /// <param name="pageSize"></param>
         /// <param name="searchValue"></param>
         /// <returns></returns>
-        public static List<Shipper> ListofShippers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+        public static List<Shipper> ListOfShippers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = shipperDB.Count(searchValue);
             return shipperDB.List(page, pageSize, searchValue).ToList();
         }
-        public static List<Shipper> ListofShipper(string searchValue = "")
+        public static List<Shipper> ListOfShippers(string searchValue = "")
         {
             return shipperDB.List(1, 0, searchValue).ToList();
         }
@@ -226,21 +220,21 @@ namespace SV21T1020171.BusinessLayers
         {
             return shipperDB.Delete(id);
         }
-        public static bool IsUsedShipper(int id)
+        public static bool InUsedShipper(int id)
         {
-            return shipperDB.IsUsed(id);
+            return shipperDB.InUsed(id);
         }
         /// <summary>
         /// Employee
         /// </summary>
         /// <param name="searchValue"></param>
         /// <returns></returns>
-        public static List<Employee> ListofEmployees(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+        public static List<Employee> ListOfEmployees(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
         {
             rowCount = employeeDB.Count(searchValue);
             return employeeDB.List(page, pageSize, searchValue).ToList();
         }
-        public static List<Employee> ListofEmployee(string searchValue = "")
+        public static List<Employee> ListOfEmployees(string searchValue = "")
         {
             return employeeDB.List(1, 0, searchValue).ToList();
         }
@@ -263,9 +257,9 @@ namespace SV21T1020171.BusinessLayers
         {
             return employeeDB.Delete(id);
         }
-        public static bool IsUsedEmployee(int id)
+        public static bool InUsedEmployee(int id)
         {
-            return employeeDB.IsUsed(id);
+            return employeeDB.InUsed(id);
         }
     }
 }

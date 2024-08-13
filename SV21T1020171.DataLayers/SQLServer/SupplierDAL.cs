@@ -80,25 +80,6 @@ namespace SV21T1020171.DataLayers.SQLServer
             }
             return data;
         }
-
-        public bool IsUsed(int id)
-        {
-            bool result = false;
-            using (var connection = OpenConnection()) {
-                var sql = @"IF EXISTS (SELECT * FROM Products WHERE SupplierID=@SupplierID  ) 
-                                  SELECT 1
-                             ELSE 
-                                  SELECT 0 ";
-                var parameters = new
-                {
-                    SupplierID = id,
-                };
-                result = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text) >0;
-                connection.Close();
-            }
-            return result;
-        }
-
         public IList<Supplier> List(int page = 1, int pagesize = 10, string searchValue = "")
         {
            List<Supplier>data = new List<Supplier>();
@@ -154,5 +135,23 @@ namespace SV21T1020171.DataLayers.SQLServer
 
         }
 
+        public bool InUsed(int id)
+        {
+            bool result = false;
+            using (var connection = OpenConnection())
+            {
+                var sql = @"IF EXISTS (SELECT * FROM Products WHERE SupplierID=@SupplierID  ) 
+                                  SELECT 1
+                             ELSE 
+                                  SELECT 0 ";
+                var parameters = new
+                {
+                    SupplierID = id,
+                };
+                result = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+            }
+            return result;
+        }
     }
 }

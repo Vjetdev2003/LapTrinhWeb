@@ -14,7 +14,7 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Index(int page=1,int pageSize=10,string searchValue="")
         {
             int rowCount = 0;
-            var data = CommonDataService.ListofShippers(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListOfShippers(out rowCount, page, PAGE_SIZE, searchValue ?? "");
 
             Models.ShipperSearchResult model = new ShipperSearchResult()
             {
@@ -83,7 +83,7 @@ namespace SV21T1020171.Web.Controllers
             var shipper = CommonDataService.GetShipper(id);
             if (shipper == null)
                 return RedirectToAction("Index");
-            ViewBag.AllowDelete = !CommonDataService.IsUsedShipper(id);
+            ViewBag.AllowDelete = !CommonDataService.InUsedShipper(id);
             return View(shipper);
         }
 

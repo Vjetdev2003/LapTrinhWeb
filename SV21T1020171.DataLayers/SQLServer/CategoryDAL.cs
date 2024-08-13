@@ -78,7 +78,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public bool IsUsed(int id)
+        public bool InUsed(int id)
         {
             bool result = false;
             using (var connection = OpenConnection())
@@ -91,7 +91,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                 {
                     CategoryID = id,
                 };
-                result = connection.ExecuteScalar<int>(sql:sql,param:parameters, commandType:CommandType.Text)>0;       
+                result = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
             return result;

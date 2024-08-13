@@ -8,11 +8,11 @@ namespace SV21T1020171.Web.Controllers
 {
     public class CustomerController : Controller
     {
-        const int PAGE_SZE = 20;
+        const int PAGE_SIZE = 20;
         public IActionResult Index(int page = 1, string searchValue = "")
         {
             int rowCount = 0;
-            var data = CommonDataService.ListofCustomers(out rowCount, page, PAGE_SZE, searchValue);
+            var data = CommonDataService.ListOfCustomers(out rowCount, page, PAGE_SIZE, searchValue);
 
 
             CustomerSearchResult model = new CustomerSearchResult
@@ -20,7 +20,7 @@ namespace SV21T1020171.Web.Controllers
                 Page = page,
                 RowCount = rowCount,
                 SearchValue = searchValue,
-                PageSize = PAGE_SZE,
+                PageSize = PAGE_SIZE,
                 Data = data
             };
             
@@ -59,7 +59,7 @@ namespace SV21T1020171.Web.Controllers
             {
                 RedirectToAction("Index");
             }
-            ViewBag.Allow.Delete = !CommonDataService.IsUsedCustomer(id);
+            ViewBag.Allow.Delete = !CommonDataService.InUsedCustomer(id);
             return View(customer);
         }
         [HttpPost]

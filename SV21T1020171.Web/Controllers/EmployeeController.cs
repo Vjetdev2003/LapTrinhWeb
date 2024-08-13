@@ -11,7 +11,7 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Index(int page = 1, int pageSize = 10, string searchValue = "")
         {
             int rowCount = 0;
-            var data = CommonDataService.ListofEmployees(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListOfEmployees(out rowCount, page, PAGE_SIZE, searchValue ?? "");
             int pageCount = 1;
             pageCount = rowCount / PAGE_SIZE;
             if (rowCount % PAGE_SIZE > 0)
@@ -70,7 +70,7 @@ namespace SV21T1020171.Web.Controllers
             var employee = CommonDataService.GetEmployee(id);
             if (employee == null)
                 return RedirectToAction("Index");
-            ViewBag.AllowDelete = !CommonDataService.IsUsedEmployee(id);
+            ViewBag.AllowDelete = !CommonDataService.InUsedEmployee(id);
             return View(employee);
         }
 

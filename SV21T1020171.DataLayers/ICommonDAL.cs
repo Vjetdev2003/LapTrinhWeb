@@ -62,7 +62,7 @@ namespace SV21T1020171.DataLayers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        bool IsUsed(int id);
+        bool InUsed(int id);
         
     }
 }

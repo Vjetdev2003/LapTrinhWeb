@@ -88,7 +88,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public bool IsUsed(int id)
+        public bool InUsed(int id)
         {
             bool result = false;
             using (var connection = OpenConnection())
@@ -102,12 +102,13 @@ namespace SV21T1020171.DataLayers.SQLServer
                 {
                     CustomerId = id
                 };
-                result = connection.ExecuteScalar<int>(sql:sql,param:parametes,commandType:CommandType.Text)>0;
+                result = connection.ExecuteScalar<int>(sql: sql, param: parametes, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
             return result;
         }
 
+    
         public IList<Customer> List(int page = 1, int pagesize = 10, string searchValue = "")
         {
             List<Customer> data = new List<Customer>();

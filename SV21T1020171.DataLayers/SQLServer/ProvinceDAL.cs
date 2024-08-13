@@ -31,7 +31,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             throw new NotImplementedException();
         }
 
-        public bool IsUsed(int id)
+        public bool InUsed(int id)
         {
             throw new NotImplementedException();
         }

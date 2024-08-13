@@ -11,7 +11,7 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Index(int page = 1, int pageSize = 10, string searchValue = "")
         {
             int rowCount = 0;
-            var data = CommonDataService.ListofCategories(out rowCount, page, PAGE_SIZE, searchValue ?? "");
+            var data = CommonDataService.ListOfCategories(out rowCount, page, PAGE_SIZE, searchValue ?? "");
 
             Models.CategorySearchResult model = new CategorySearchResult()
             {
@@ -80,7 +80,7 @@ namespace SV21T1020171.Web.Controllers
             var category = CommonDataService.GetCategory(id);
             if (category == null)
                 return RedirectToAction("Index");
-            ViewBag.AllowDelete = !CommonDataService.IsUsedCategory(id);
+            ViewBag.AllowDelete = !CommonDataService.InUsedCategory(id);
             return View(category);
         }
         /// Detail

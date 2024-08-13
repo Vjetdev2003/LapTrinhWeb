@@ -9,13 +9,14 @@ namespace SV21T1020171.DomainModels
     public class Product
     {
         public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string Unit { get; set; }
+        public string ProductName { get; set; } = "";
+        public string ProductDescription { get; set; } = "";
+        public int SupplierID {  get; set; }
+        public int CategoryID { get; set; }
+        public string Unit { get; set; } = "";
         public double Price { get; set; }
+        public string Photo { get; set; } = "";
+        public bool IsSelling { get; set; }
 
-        public static implicit operator Product(bool v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -86,21 +86,20 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public bool IsUsed(int id)
+        public bool InUsed(int id)
         {
             bool result = false;
             using (var connection = OpenConnection())
             {
-
-                var sql = @"IF EXISTS (SELECT * FROM Shippers WHERE ShipperID = @ShipperID)
-                                 SELECT 1
+                var sql = @"IF EXISTS (SELECT * FROM Shippers WHERE ShipperID=@ShipperID  ) 
+                                  SELECT 1
                              ELSE 
                                   SELECT 0 ";
-                var parametes = new
+                var parameters = new
                 {
-                    ShipperID = id
+                    ShipperID = id,
                 };
-                result = connection.ExecuteScalar<int>(sql: sql, param: parametes, commandType: CommandType.Text) > 0;
+                result = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
             return result;
