@@ -73,7 +73,7 @@ namespace SV21T1020171.DataLayers
         /// </summary>
         /// <param name="productID"></param>
         /// <returns></returns>
-        ProductPhoto GetPhoto(long productID);
+        ProductPhoto GetPhoto(long photoID);
         /// <summary>
         /// Bổ sung một ảnh cho mặt hàng
         /// </summary>
@@ -91,7 +91,7 @@ namespace SV21T1020171.DataLayers
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        bool DeletePhoto(long productID);
+        bool DeletePhoto(long photoID);
         /// <summary>
         /// Lấy danh sách các thuộc tính của mặt hàng,sắp xếp theo thứ tự của DisplayOrder
         /// </summary>

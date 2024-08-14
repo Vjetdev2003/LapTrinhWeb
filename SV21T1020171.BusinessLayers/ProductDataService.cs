@@ -54,9 +54,9 @@ namespace SV21T1020171.BusinessLayers
 
         #region Product Photo
 
-        public static List<ProductPhoto> ListProductPhotos(int productId)
+        public static List<ProductPhoto> ListProductPhotos(int productID)
         {
-            return productDB.ListPhotos(productId).ToList();
+            return productDB.ListPhotos(productID).ToList();
         }
         public static ProductPhoto? GetProductPhoto(long productPhotoId)
         {

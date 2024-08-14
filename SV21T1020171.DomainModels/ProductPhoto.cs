@@ -13,6 +13,6 @@ namespace SV21T1020171.DomainModels
         public string Photo { get; set; } = "";
         public string Description { get; set; } = "";
         public int DisplayOrder { get; set; }
-        public bool IsHidden {  get; set; }
+        public bool IsHidden { get; set; } = false;
     }
 }

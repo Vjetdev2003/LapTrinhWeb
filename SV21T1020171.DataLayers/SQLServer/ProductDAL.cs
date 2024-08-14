@@ -21,9 +21,9 @@ namespace SV21T1020171.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"INSERT INTO Products(ProductName,ProductDescription,SupplierID,CategoryID,Unit,Price,Photo,IsSelling)
-                        VALUES(@ProductName,@ProductDescription,@SupplierID,@CategoryID,@Unit,@Price,@Photo,@IsSelling);
-                            SELECT @@IDENTITY";
+                string sql = @"insert into Products(ProductName, ProductDescription, SupplierID, CategoryID, Unit, Price, Photo, IsSelling)
+                                values (@ProductName, @ProductDescription, @SupplierID, @CategoryID, @Unit, @Price, @Photo, @IsSelling);
+                                select @@Identity;";
                 var parameters = new
                 {
                     ProductName = data.ProductName,
@@ -33,13 +33,9 @@ namespace SV21T1020171.DataLayers.SQLServer
                     Unit = data.Unit,
                     Price = data.Price,
                     Photo = data.Photo,
-                    IsSelling = data.IsSelling,
-                    
-                    
+                    IsSelling = data.IsSelling
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
-                connection.Close();
-
             }
             return id;
         }
@@ -49,19 +45,18 @@ namespace SV21T1020171.DataLayers.SQLServer
             long id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"INSERT INTO ProductAttributes(ProductID, AttributeName, AttributeValue)
-                            VALUES(@ProductID, @AttributeName, @AttributeValue);
-                            SELECT CAST(SCOPE_IDENTITY() as long)";
+                var sql = @"INSERT INTO ProductAttributes(ProductID, AttributeName, AttributeValue,DisplayOrder)
+                            VALUES(@ProductID, @AttributeName,@AttributeValue,@DisplayOrder);
+                            SELECT @@Identity";
                 var parameters = new
                 {
-                    data.ProductID,
-                    data.AttributeName,
-                    data.AttributeValue
+                    ProductID=data.ProductID,
+                    AttributeName = data.AttributeName??"",
+                    AttributeValue = data.AttributeValue??"",
+                    DisplayOrder = data.DisplayOrder
                 };
-                int tempId = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                id= connection.ExecuteScalar<long>(sql: sql, param: parameters, commandType: CommandType.Text);
 
-                // Chuyển đổi kiểu int sang long
-                id = (long)tempId;
                 connection.Close(); 
             }
             return id;
@@ -73,18 +68,18 @@ namespace SV21T1020171.DataLayers.SQLServer
             
             using (var connection = OpenConnection())
             {
-                var sql = @"INSERT INTO ProductPhotos(ProductID, Photo)
-                            VALUES(@ProductID, @Photo);
-                           SELECT CAST(SCOPE_IDENTITY() AS bigint)";
+                var sql = @"INSERT INTO ProductPhotos(ProductID, Photo,Description,DisplayOrder,IsHidden)
+                            VALUES(@ProductID, @Photo,@Description,@DisplayOrder,@IsHidden);
+                           select @@Identity";
                 var parameters = new
                 {
-                    data.ProductID,
-                    data.Photo
+                    ProductID = data.ProductID,
+                    Photo=  data.Photo ??"",
+                    Description =  data.Description??"",
+                    DisplayOrder = data.DisplayOrder,
+                    IsHidden =  data.IsHidden
                 };
-                int tempId = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
-
-                // Chuyển đổi kiểu int sang long
-                id = (long)tempId;
+                id = connection.ExecuteScalar<long>(sql: sql, param: parameters, commandType: CommandType.Text);
                 connection.Close();
             }
             return id;
@@ -125,7 +120,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                 var sql = @"DELETE FROM Products WHERE ProductID=@ProductID";
                 var parameters = new
                 {
-                   productID = productID
+                    ProductId = productID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
             }
@@ -145,14 +140,14 @@ namespace SV21T1020171.DataLayers.SQLServer
             return result;
         }
 
-        public bool DeletePhoto(long productID)
+        public bool DeletePhoto(long photoID)
         {
 
             bool result = false;
             using (var connection = OpenConnection())
             {
                 var sql = "DELETE FROM ProductPhotos WHERE PhotoID = @PhotoID";
-                var parameters = new { productID=productID };
+                var parameters = new { photoID= photoID };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
@@ -189,9 +184,9 @@ namespace SV21T1020171.DataLayers.SQLServer
             return data;
         }
 
-        public ProductPhoto GetPhoto(long productID)
+        public ProductPhoto? GetPhoto(long productID)
         {
-            ProductPhoto data = null;
+            ProductPhoto? data = null;
             using (var connection = OpenConnection())
             {
                 var sql = "SELECT * FROM ProductPhotos WHERE PhotoID = @PhotoID";
@@ -204,20 +199,29 @@ namespace SV21T1020171.DataLayers.SQLServer
 
         public bool InUsed(int productID)
         {
-            bool result = false;
+            var result = false;
             using (var connection = OpenConnection())
             {
-
-                var sql = @"IF EXISTS (SELECT * FROM Products WHERE ProductId = @ProductId)
-                                 SELECT 1
-                             ELSE 
-                                  SELECT 0 ";
-                var parameters = new
-                {
-                    ProductID= productID,
-                };
-                result = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                string sql = @"IF EXISTS (
+                                        SELECT * 
+                                        FROM OrderDetails 
+                                        WHERE ProductID = @ProductID
+                                    ) OR EXISTS (
+                                        SELECT * 
+                                        FROM ProductPhotos 
+                                        WHERE ProductID = @ProductID
+                                    ) OR EXISTS (
+                                        SELECT * 
+                                        FROM ProductAttributes 
+                                        WHERE ProductID = @ProductID
+                                    )
+                                        SELECT 1
+                                    ELSE
+                                        SELECT 0;";
+                var param = new { ProductID = productID };
+                int count = connection.ExecuteScalar<int>(sql, param, commandType: CommandType.Text);
                 connection.Close();
+                result = count > 0;
             }
             return result;
         }
@@ -287,6 +291,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                 var sql = "UPDATE Products SET " +
                     " ProductName = @ProductName," +
                     "ProductDescription=@ProductDescription," +
+                    "SupplierID=@SupplierID," +
+                    "CategoryID=@CategoryID," +
                     "Unit=@Unit," +
                     "Price=@Price," +
                     "Photo=@Photo," +
@@ -296,11 +302,13 @@ namespace SV21T1020171.DataLayers.SQLServer
                 {
                     ProductName = data.ProductName,
                     ProductDescription = data.ProductDescription,
+                    SupplierID = data.SupplierID,
+                    CategoryID = data.CategoryID,
                     Unit = data.Unit,
                     Price = data.Price,
                     Photo = data.Photo,
                     IsSelling = data.IsSelling,
-                    ProductId=data.ProductId
+                    ProductId=data.ProductID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
             }
@@ -314,13 +322,16 @@ namespace SV21T1020171.DataLayers.SQLServer
             {
                 var sql = @"UPDATE ProductAttributes
                             SET AttributeName = @AttributeName,
-                                AttributeValue = @AttributeValue
-                            WHERE AttributeID = @AttributeID";
+                                AttributeValue = @AttributeValue,
+                                DisplayOrder = @DisplayOrder
+                             where ProductID = @ProductID and AttributeID = @AttributeID";
                 var parameters = new
                 {
-                    data.AttributeID,
-                    data.AttributeName,
-                    data.AttributeValue
+                    ProductID= data.ProductID,
+                    AttributeID = data.AttributeID,
+                    AttributeName = data.AttributeName,
+                    DisplayOrder = data.DisplayOrder,
+                    AttributeValue = data.AttributeValue
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
                 connection.Close();
@@ -334,12 +345,19 @@ namespace SV21T1020171.DataLayers.SQLServer
             using (var connection = OpenConnection())
             {
                 var sql = @"UPDATE ProductPhotos
-                            SET Photo = @Photo
-                            WHERE PhotoID = @PhotoID";
+                            SET Photo = @Photo,
+                                Description=@Description,
+                                DisplayOrder=@DisplayOrder,
+                                IsHidden=@IsHidden
+                            where ProductID = @ProductID and PhotoID = @PhotoID";
                 var parameters = new
                 {
-                    data.PhotoId,
-                    data.Photo
+                    ProductID= data.ProductID,
+                    Description= data.Description,
+                    DisplayOrder= data.DisplayOrder,
+                    IsHidden= data.IsHidden,
+                    PhotoId=data.PhotoId,
+                    Photo=data.Photo
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
                 connection.Close();  

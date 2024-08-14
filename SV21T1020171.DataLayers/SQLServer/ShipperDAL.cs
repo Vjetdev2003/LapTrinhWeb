@@ -91,7 +91,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"IF EXISTS (SELECT * FROM Shippers WHERE ShipperID=@ShipperID  ) 
+                var sql = @"IF EXISTS (SELECT * FROM Orders WHERE ShipperID=@ShipperID  ) 
                                   SELECT 1
                              ELSE 
                                   SELECT 0 ";

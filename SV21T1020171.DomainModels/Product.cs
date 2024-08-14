@@ -8,7 +8,7 @@ namespace SV21T1020171.DomainModels
 {
     public class Product
     {
-        public int ProductId { get; set; }
+        public int ProductID { get; set; }
         public string ProductName { get; set; } = "";
         public string ProductDescription { get; set; } = "";
         public int SupplierID {  get; set; }

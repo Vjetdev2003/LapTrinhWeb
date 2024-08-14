@@ -5,7 +5,7 @@ using System.Data;
 
 namespace SV21T1020171.DataLayers.SQLServer
 {
-    public class CategoryDAL :_BaseDAL,ICommonDAL<Category>
+    public class CategoryDAL :_BaseDAL,ICommonDAL<Category> 
     {
         public CategoryDAL(string connectionString):base(connectionString) { 
         
@@ -83,7 +83,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"IF EXISTS (SELECT * FROM Categories WHERE CategoryID=@CategoryID)
+                var sql = @"IF EXISTS (SELECT * FROM Products WHERE CategoryID=@CategoryID)
                            SELECT 1 
                             ESLE
                             SELECT 0";

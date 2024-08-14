@@ -96,7 +96,7 @@ namespace SV21T1020171.DataLayers.SQLServer
             using (var connection = OpenConnection())
             {
 
-                var sql = @"IF EXISTS (SELECT * FROM Employees WHERE EmployeeID = @EmployeeID)
+                var sql = @"IF EXISTS (SELECT * FROM Orders WHERE EmployeeID = @EmployeeID)
                                  SELECT 1
                              ELSE 
                                   SELECT 0 ";
