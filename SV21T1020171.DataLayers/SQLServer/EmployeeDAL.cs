@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,22 +20,25 @@ namespace SV21T1020171.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @" INSERT INTO Employees(FullName,BirthDate,Address,Phone,Email,Photo,IsWorking)
-                              VALUES(@FullName,@BirthDate,@Address,@Phone,@Email,@Photo,@IsWorking);
-                         SELECT @@IDENTITY";
-                var parameters = new
+                var sql = @"
+                    INSERT INTO Employees(FullName, BirthDate, [Address], Phone, Email, Photo, IsWorking) 
+                    VALUES (@FullName, @BirthDate, @Address, @Phone, @Email, @Photo, @IsWorking);
+
+                    SELECT @@IDENTITY
+                ";
+                var param = new
                 {
                     FullName = data.FullName ?? "",
                     BirthDate = data.BirthDate,
-                    Address= data.Address??"",
+                    Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
-                    Email=  data.Email ??"",
-                    Photo= data.Photo ??"",
-                    IsWorking =data.IsWorking
+                    Email = data.Email ?? "",
+                    Photo = data.Photo ?? "",
+                    IsWorking = data.IsWorking
                 };
-                id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                id = connection.ExecuteScalar<int>(sql, param, commandType: System.Data.CommandType.Text);
                 connection.Close();
-            }
+            };
             return id;
         }
 
@@ -45,14 +47,16 @@ namespace SV21T1020171.DataLayers.SQLServer
             int count = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"select count(*)
-                            from Employees
-                             where FullName like @searchValue ";
-                var parameters = new
+                var sql = @"
+                    SELECT count(*) 
+                    FROM Employees
+                    WHERE FullName LIKE @searchValue
+                ";
+                var param = new
                 {
                     searchValue = $"%{searchValue}%"
                 };
-                count = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                count = connection.ExecuteScalar<int>(sql, param, commandType: System.Data.CommandType.Text);
                 connection.Close();
             }
             return count;
@@ -60,15 +64,19 @@ namespace SV21T1020171.DataLayers.SQLServer
 
         public bool Delete(int id)
         {
+
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"DELETE FROM Employees WHERE EmployeeID=@EmployeeID";
-                var parameters = new
+                var sql = @"
+                    DELETE FROM Employees
+                    WHERE EmployeeID = @EmployeeID
+                ";
+                var param = new
                 {
-                    EmployeeID = id,
+                    EmployeeID = id
                 };
-                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                result = connection.Execute(sql, param, commandType: System.Data.CommandType.Text) > 0;
                 connection.Close();
             }
             return result;
@@ -79,12 +87,16 @@ namespace SV21T1020171.DataLayers.SQLServer
             Employee? data = null;
             using (var connection = OpenConnection())
             {
-                var sql = @"SELECT * FROM Employees WHERE EmployeeID=@EmployeeID";
-                var parameters = new
+                var sql = @"
+                    SELECT * 
+                    FROM Employees
+                    WHERE EmployeeId = @EmployeeId 
+                ";
+                var param = new
                 {
-                    EmployeeID = id,
+                    EmployeeId = id
                 };
-                data = connection.QueryFirstOrDefault<Employee?>(sql: sql, param: parameters, commandType: CommandType.Text);
+                data = connection.QueryFirstOrDefault<Employee>(sql, param, commandType: System.Data.CommandType.Text);
                 connection.Close();
             }
             return data;
@@ -95,16 +107,16 @@ namespace SV21T1020171.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-
-                var sql = @"IF EXISTS (SELECT * FROM Orders WHERE EmployeeID = @EmployeeID)
-                                 SELECT 1
-                             ELSE 
-                                  SELECT 0 ";
-                var parametes = new
+                var sql = @"
+                    SELECT COUNT(*) 
+                    FROM Orders 
+                    WHERE EmployeeID = @EmployeeID
+                ";
+                var param = new
                 {
                     EmployeeID = id
                 };
-                result = connection.ExecuteScalar<int>(sql: sql, param: parametes, commandType: CommandType.Text) > 0;
+                result = connection.ExecuteScalar<int>(sql, param, commandType: System.Data.CommandType.Text) > 0;
                 connection.Close();
             }
             return result;
@@ -112,29 +124,30 @@ namespace SV21T1020171.DataLayers.SQLServer
 
         public IList<Employee> List(int page = 1, int pagesize = 10, string searchValue = "")
         {
-            List<Employee> data = new List<Employee>();
+            List<Employee> result = new List<Employee>();
             using (var connection = OpenConnection())
             {
-                var sql = @"SELECT *
-                                    FROM(
-	                                    SELECT *,
-	                                    ROW_NUMBER()over (order by FullName) as RowNumber
-	                                    FROM Employees
-	                                    WHERE FullName like @searchValue 
-	                                    ) as t
-                                    where @pageSize=0
-                                      or RowNumber between (@page-1) * @pageSize +1 and (@page *@pageSize)
-                                    ";
-                var parameters = new
+                var sql = @"
+                            SELECT * 
+                            FROM (
+		                            SELECT *, 
+			                            ROW_NUMBER() OVER (ORDER BY FullName) AS RowNumber
+		                            FROM Employees
+		                            WHERE FullName LIKE @searchValue 
+	                            ) AS t
+                            WHERE @pageSize = 0
+	                            OR (RowNumber BETWEEN (@page - 1) * @pageSize + 1 AND @page * @pageSize)
+                            ORDER BY RowNumber";
+                var param = new
                 {
-                    page = page,///tên tham số trong câu lệnh SQL Page đầu tiên 
-                    pagesize = pagesize,
+                    page = page,
+                    pageSize = pagesize,
                     searchValue = $"%{searchValue}%"
                 };
-                data = (List<Employee>)connection.Query<Employee>(sql: sql, param: parameters, commandType: CommandType.Text);
+                result = connection.Query<Employee>(sql, param, commandType: System.Data.CommandType.Text).ToList();
                 connection.Close();
             }
-            return data;
+            return result;
         }
 
         public bool Update(Employee data)
@@ -142,27 +155,29 @@ namespace SV21T1020171.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"UPDATE Employees SET 
-                            FullName=@FullName,
-                            BirthDate=@BirthDate,
-                            Address=@Address,
-                            Phone=@Phone,
-                            Email=@Email,
-                            Photo=@Photo,
-                            IsWorking=@IsWorking
-                            WHERE EmployeeID=@EmployeeID";
-                var parameters = new
+                var sql = @"
+                        UPDATE Employees
+                        SET FullName = @FullName,
+	                        BirthDate = @BirthDate,
+	                        Address =  @Address,
+	                        Phone =  @Phone,
+	                        Email = @Email,
+	                        IsWorking = @IsWorking,
+	                        Photo = @Photo
+                        WHERE EmployeeID = @EmployeeID
+                       ";
+                var param = new
                 {
-                    FullName=data.FullName ??"",
+                    FullName = data.FullName ?? "",
                     BirthDate = data.BirthDate,
-                    Address=data.Address??"",
-                    Phone =data.Phone??"",
-                    Email=data.Email ??"",
-                    Photo=data.Photo ??"",
-                    IsWorking=data.IsWorking,
-                    EmployeeID=data.EmployeeID,
+                    Address = data.Address ?? "",
+                    Phone = data.Phone ?? "",
+                    Email = data.Email ?? "",
+                    IsWorking = data.IsWorking,
+                    Photo = data.Photo ?? "",
+                    EmployeeID = data.EmployeeID
                 };
-                result = connection.ExecuteScalar<bool>(sql: sql, param: parameters, commandType: CommandType.Text);
+                result = connection.Execute(sql, param, commandType: CommandType.Text) > 0;
                 connection.Close();
             }
             return result;

@@ -40,6 +40,12 @@ namespace SV21T1020171.Web.Models
     {
         public required List<Supplier> Data { get; set; }
     }
+
+    public class EmployeeSearchResult : PaginationSearchResult
+    {
+        public required List<Employee> Data { get; set; }
+    }
+
     public class ProductSearchResult : PaginationSearchResult
     {
         public required List<Product> Data { get; set; }

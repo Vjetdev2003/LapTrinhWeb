@@ -16,4 +16,8 @@
     <ProjectReference Include="..\SV21T1020171.DomainModels\SV21T1020171.DomainModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Customer\" />
+  </ItemGroup>
+
 </Project>

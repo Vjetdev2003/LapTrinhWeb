@@ -139,17 +139,12 @@ namespace SV21T1020171.Web.Controllers
             if (Request.Method == "POST")
             {
                 var PhotoPath = product.Photo;
-                //Kiểm tra xem chuỗi có rỗng không
                 if (!string.IsNullOrEmpty(PhotoPath))
                 {
-                    //Lấy đường dẫn thư mục lưu tệp
                     var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images/Product");
-                    //Kết hợp lại để tạo một đường dẫn đầy đủ
                     var filePath = Path.Combine(uploadsFolder, PhotoPath);
-                    //kiểm tra xem đường dẫn đó có tồn tại file ảnh không
                     if (System.IO.File.Exists(filePath))
                     {
-                        //thực hiện xoá ảnh nếu tồn tại
                         System.IO.File.Delete(filePath);
                     }
                 }
