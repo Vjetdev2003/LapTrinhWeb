@@ -4,7 +4,7 @@
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form action="~/Order/Shipping/111" method="post">
+        <form id="form-shipping" action="~/Order/Shipping/@ViewBag.OrderID" method="post">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Chuyển giao hàng cho đơn hàng</h4>
@@ -12,11 +12,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="control-label">Người giao hàng:</label>
-                    <select class="form-control" name="shipperID">
-                        <option value="0">-- Chọn người giao hàng ---</option>
-                        <option value="1">Giao hàng Tiết kiệm</option>
-                        <option value="2">Tín Thành</option>
-                        <option value="3">Viettel Express</option>
+                    <select class="form-control" name="@nameof(Model.ShipperID)">
+                        <option>-- Nhà cung cấp --</option>
+                        @foreach (var shipper in CommonDataService.ListOfShippers())
+                        {
+
+                                <option value="@shipper.ShipperID">@shipper.ShipperName</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -31,3 +33,37 @@
         </form>
     </div>
 </div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#formSearch").submit(function (e) {
+                e.preventDefault();
+                paginationSearch(this, 1);
+                return;
+            });
+            paginationSearch("#formSearch", @Model.Page);
+        });
+
+        function paginationSearch(formSearch, page) {
+            var action = $(formSearch).prop("action");
+            var method = $(formSearch).prop("method");
+            var container = $(formSearch).data("container");
+
+            var searchData = $(formSearch).serializeArray();
+            searchData.push({ "name": "Page", "value": page });
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchData,
+                async: false,
+                error: function () {
+                    alert("Your request is not valid!");
+                },
+                success: function (data) {
+                    $(container).html(data);
+                }
+            });
+        }
+    </script>
+}

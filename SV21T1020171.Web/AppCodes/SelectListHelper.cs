@@ -51,7 +51,7 @@ namespace SV21T1020171.Web
             }
             return list;
         }
-
+      
         /// <summary>
         /// Nhà cung cấp
         /// </summary>
@@ -163,6 +163,26 @@ namespace SV21T1020171.Web
             }
             return list;
         }
+        //public static List<SelectListItem> ListOrderStatus() {
+        //    List<SelectListItem>list = new List<SelectListItem>();
+        //    list.Add(new SelectListItem()
+        //    {
+        //        Value = "",
+        //        Text = "-- Trạng Thái --"
+        //    });
+        //    int rowCount;
+        //    foreach (var item in OrderDataService.InitOrder(out rowCount))
+        //    {
+        //        list.Add(new SelectListItem()
+        //        {
+        //            Value = item.OrderID.ToString(),
+        //            Text = item.OrderStatus.ToString()
+        //        });
+        //    }
+        //    return list;
+        //}
+
+        
     }
 
 }

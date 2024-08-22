@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 <label>Tỉnh thành</label>
-                <select class="form-control" name="@nameof(Model.Province)">
+               @*  <select class="form-control" name="@nameof(Model.Province)">
                     <option value="">-- Chọn tỉnh thành</option>
                     @foreach(var province in CommonDataService.ListofProvinces())
                     {
@@ -43,7 +43,9 @@
                             <option value="@province.ProvinceName">@province.ProvinceName</option>
                         }
                     }
-                </select>
+                   
+                </select> *@ 
+                @Html.DropDownListFor(m => m.Province, SelectListHelper.Provinces(), new { @class = "form-control" })
                 @Html.ValidationMessageFor(m=>m.Province) 
             </div>
             <div class="form-group">

@@ -146,7 +146,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                     Phone = data.Phone ?? "",
                     ShipperID = data.ShipperID
                 };
-                result = connection.ExecuteScalar<bool>(sql: sql, param: parameters, commandType: CommandType.Text);
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
                 connection.Close();
             }
             return result;

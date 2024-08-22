@@ -31,6 +31,7 @@ namespace SV21T1020171.Web.Controllers
             }
 
             var userAccount = UserAccountService.Authorize(username, password);
+            
             if (userAccount == null)
             {
                 ModelState.AddModelError("Error", "Đăng nhập thất bại!");

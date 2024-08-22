@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SV21T1020171.DataLayers.SQLServer
 {
+    
     public class CustomerDAL : _BaseDAL, ICommonDAL<Customer>
     {
         

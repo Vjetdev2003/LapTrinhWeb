@@ -1,0 +1,6 @@
+1.Sửa View của Login 
+2.Thêm class UserAccount trong DomainModels
+3.Thêm class Interfaces trong DataLayers IUser
+3.Thêm DAL vào folder SqlServer : class EmployeeAccountDAL
+4.Thêm class UserAccountService vào trong BussinessLayers
+5.Sửa thông tin ở phần _Header

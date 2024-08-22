@@ -1,0 +1,64 @@
+﻿@model ProductSearchResult
+@{
+    Layout = null;
+}
+        <!--Hiển thị dữ liệu-->
+<p style="margin-left: 20px; margin-right: 20px;">
+    Có <strong>@Model.RowCount</strong> sản phẩm trong tổng số <strong>@Model.PageCount</strong> trang
+</p>
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+    <table class="table table-bordered table-hover table-striped" style="width: 100%;">
+        <thead>
+            <tr class="bg-primary">
+                <th style="width:100px; padding: 10px;">Ảnh</th>
+                <th style="padding: 10px;">Tên mặt hàng</th>
+                <th style="padding: 10px;">Đơn vị tính</th>
+                <th style="padding: 10px;">Giá</th>
+                <th style="padding: 10px;">Trạng thái</th>
+                <th style="width:80px; padding: 10px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Data)
+            {
+                <tr>
+                    <td style="padding: 10px;">
+                        <img src="@Url.Content("~/Images/Product/" + product.Photo)" style="width:100px;" />
+                    </td>
+                    <td style="padding: 10px;">@product.ProductName</td>
+                    <td style="padding: 10px;">@product.Unit</td>
+                    <td style="padding: 10px;">@product.Price.ToString("")</td>
+                    <td style="padding: 10px;">@(product.IsSelling ? "Đang bán" : "Ngừng bán")</td>
+                    <td class="text-right" style="padding: 10px;">
+                        <a href="~/Product/Edit/@product.ProductID" class="btn btn-xs btn-info" style="margin-right: 5px;">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a href="~/Product/Delete/@product.ProductID" class="btn btn-xs btn-danger">
+                            <i class="fa fa-remove"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.PageCount > 1)
+    {
+    <div class="text-center">
+        <ul class="pagination">
+            @for (int p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <li class="active"><a href="#">@p</a></li>
+                }
+                else
+                {
+                    <li><a href="javascript:;" onclick="paginationSearch('#formSearch', @p)">@p</a></li>
+                }
+            }
+        </ul>
+    </div>
+    }
+</div>
+
+   
