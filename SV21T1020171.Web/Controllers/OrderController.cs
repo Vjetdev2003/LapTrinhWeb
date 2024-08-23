@@ -196,29 +196,32 @@ public class OrderController : Controller
         ViewBag.OrderID=id;
         return View();
     }
-    /// <summary>
-    /// Ghi nhận giao hàng cho đơn hàng và chuyển đơn giao hàng sang trạng thái đang giao hàng
-    /// Hàm trả về chuỗi khác rỗng thông báo lỗi nếu đầu vào không hợp lệ hoặc lỗi ,
-    /// Hàm trả về chuỗi rỗng nếu thành công
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="shipperId"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult Shipping(int id = 0,int shipperId=0)
-    {
-        if (shipperId <= 0)
-            return Json("Vui lòng chọn người giao hàng");
-        bool result = OrderDataService.ShipOrder(id, shipperId);
-        if (!result)
-            return Json("Đơn hàng không cho phép chuyển cho người giao hàng");
-        return RedirectToAction("Details");
-    }
-    /// <summary>
-    /// Giao diện trang lập đơn hàng mới 
-    /// </summary>
-    /// <returns></returns>
-    public IActionResult Create()
+        /// <summary>
+        /// Ghi nhận giao hàng cho đơn hàng và chuyển đơn giao hàng sang trạng thái đang giao hàng
+        /// Hàm trả về chuỗi khác rỗng thông báo lỗi nếu đầu vào không hợp lệ hoặc lỗi ,
+        /// Hàm trả về chuỗi rỗng nếu thành công
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shipperId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult Shipping(int id = 0, int shipperId = 0)
+        {
+            if (shipperId <= 0)
+                return Json(new { success = false, message = "Vui lòng chọn người giao hàng" });
+
+            bool result = OrderDataService.ShipOrder(id, shipperId);
+
+            if (!result)
+                return Json(new { success = false, message = "Đơn hàng không cho phép chuyển cho người giao hàng" });
+
+            return Json(new { success = true, redirectUrl = Url.Action("Details", new { id }) });
+        }
+        /// <summary>
+        /// Giao diện trang lập đơn hàng mới 
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Create()
     {
         var input = ApplicationContext.GetSessionData<ProductSearchInput>(PRODUCT_SEARCH);
         if(input == null)

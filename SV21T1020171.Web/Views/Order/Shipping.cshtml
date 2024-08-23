@@ -34,25 +34,54 @@
     $(document).ready(function () {
         $('#formShipping').submit(function (e) {
             e.preventDefault();
+
             var url = $(this).prop("action");
             var method = $(this).prop("method");
             var postData = $(this).serializeArray();
+
             $.ajax({
                 url: url,
                 type: method,
                 data: postData,
-                error: function () {
-                    alert("Your request is not valid!");
-                },
-                success: function (data) {
-                    if (data !== "") {
-                        $("#shippingErrorMessage").html(data);
+                success: function (response) {
+                    if (response.success) {
+                        // Nếu cập nhật thành công, chuyển hướng hoặc làm mới trang
+                        window.location.href = response.redirectUrl;
                     } else {
-                        location.reload();
+                        // Hiển thị thông báo lỗi nếu có lỗi
+                        $("#shippingErrorMessage").html(response.message);
                     }
+                },
+                error: function () {
+                    alert("Yêu cầu của bạn không hợp lệ!");
                 }
             });
-            return;
+        });
+    }); $(document).ready(function () {
+        $('#formShipping').submit(function (e) {
+            e.preventDefault();
+
+            var url = $(this).prop("action");
+            var method = $(this).prop("method");
+            var postData = $(this).serializeArray();
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: postData,
+                success: function (response) {
+                    if (response.success) {
+                        // Nếu cập nhật thành công, chuyển hướng hoặc làm mới trang
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Hiển thị thông báo lỗi nếu có lỗi
+                        $("#shippingErrorMessage").html(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Yêu cầu của bạn không hợp lệ!");
+                }
+            });
         });
     });
 </script>
