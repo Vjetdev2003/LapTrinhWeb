@@ -163,26 +163,78 @@ namespace SV21T1020171.Web
             }
             return list;
         }
-        //public static List<SelectListItem> ListOrderStatus() {
-        //    List<SelectListItem>list = new List<SelectListItem>();
-        //    list.Add(new SelectListItem()
-        //    {
-        //        Value = "",
-        //        Text = "-- Trạng Thái --"
-        //    });
-        //    int rowCount;
-        //    foreach (var item in OrderDataService.InitOrder(out rowCount))
-        //    {
-        //        list.Add(new SelectListItem()
-        //        {
-        //            Value = item.OrderID.ToString(),
-        //            Text = item.OrderStatus.ToString()
-        //        });
-        //    }
-        //    return list;
-        //}
+        /// <summary>
+        /// Vai trò
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> RoleNames()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "employee",
+                Text = "Nhân viên"
+            });
 
-        
+            list.Add(new SelectListItem()
+            {
+                Value = "admin",
+                Text = "Quản trị hệ thống"
+            });
+
+            list.Add(new SelectListItem()
+            {
+                Value = "employee,admin",
+                Text = "Nhân viên, Quản trị hệ thống"
+            });
+            return list;
+        }
+        /// <summary>
+        /// Trạng thái
+        /// </summary>
+        /// <returns></returns>
+        public static List<SelectListItem> Status()
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            list.Add(new SelectListItem()
+            {
+                Value = "0",
+                Text = "-- Trạng thái --",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "1",
+                Text = "Đơn hàng mới(chờ duyệt)",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "2",
+                Text = "Đơn hàng đã duyệt (chờ chuyển hàng)",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "3",
+                Text = "Đơn hàng đang được giao",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "4",
+                Text = "Đơn hàng đã hoàn tất thành công",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "-1",
+                Text = "Đơn hàng bị hủy",
+            });
+            list.Add(new SelectListItem()
+            {
+                Value = "-2",
+                Text = "Đơn hàng bị từ chối",
+            });
+            return list;
+        }
+
+
     }
 
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SV21T1020171.Web.Controllers
 {
-    [Authorize]
+     [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class ShipperController : Controller
 
     {

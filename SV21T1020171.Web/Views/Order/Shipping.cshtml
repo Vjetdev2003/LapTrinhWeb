@@ -1,10 +1,11 @@
-﻿﻿@{
+﻿@{
     Layout = null;
 }
 
+
 <div class="modal-dialog">
     <div class="modal-content">
-        <form id="form-shipping" action="~/Order/Shipping/@ViewBag.OrderID" method="post">
+        <form id="formShipping" action="~/Order/Shipping/@ViewBag.OrderID" method="post">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Chuyển giao hàng cho đơn hàng</h4>
@@ -12,14 +13,10 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="control-label">Người giao hàng:</label>
-                    <select class="form-control" name="@nameof(Model.ShipperID)">
-                        <option>-- Nhà cung cấp --</option>
-                        @foreach (var shipper in CommonDataService.ListOfShippers())
-                        {
-
-                                <option value="@shipper.ShipperID">@shipper.ShipperName</option>
-                        }
-                    </select>
+                    @Html.DropDownList("shipperID", SelectListHelper.Shippers(), new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <span id="shippingErrorMessage" style="color:#f00"></span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -33,37 +30,34 @@
         </form>
     </div>
 </div>
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            $("#formSearch").submit(function (e) {
-                e.preventDefault();
-                paginationSearch(this, 1);
-                return;
-            });
-            paginationSearch("#formSearch", @Model.Page);
-        });
-
-        function paginationSearch(formSearch, page) {
-            var action = $(formSearch).prop("action");
-            var method = $(formSearch).prop("method");
-            var container = $(formSearch).data("container");
-
-            var searchData = $(formSearch).serializeArray();
-            searchData.push({ "name": "Page", "value": page });
-
+<script>
+    $(document).ready(function () {
+        $('#formShipping').submit(function (e) {
+            e.preventDefault();
+            var url = $(this).prop("action");
+            var method = $(this).prop("method");
+            var postData = $(this).serializeArray();
             $.ajax({
-                url: action,
+                url: url,
                 type: method,
-                data: searchData,
-                async: false,
+                data: postData,
                 error: function () {
                     alert("Your request is not valid!");
                 },
                 success: function (data) {
-                    $(container).html(data);
+                    if (data !== "") {
+                        $("#shippingErrorMessage").html(data);
+                    } else {
+                        location.reload();
+                    }
                 }
             });
-        }
-    </script>
-}
+            return;
+        });
+    });
+</script>
+
+
+
+
+

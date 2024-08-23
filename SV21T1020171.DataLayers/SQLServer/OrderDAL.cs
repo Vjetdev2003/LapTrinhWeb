@@ -16,19 +16,24 @@ namespace SV21T1020171.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"insert into Orders(CustomerId, OrderTime,DeliveryProvince, DeliveryAddress,EmployeeID, Status)
-                            values(@CustomerID, getdate(),@DeliveryProvince, @DeliveryAddress,@EmployeeID, @Status);
-                         select @@identity";
+                var sql = @"insert into Orders(CustomerId, OrderTime,
+                            DeliveryProvince, DeliveryAddress,
+                            EmployeeID, Status)
+                            values(@CustomerID, getdate(),
+                            @DeliveryProvince, @DeliveryAddress,
+                            @EmployeeID, @Status);
+
+                            select @@identity";
                 var parameters = new
                 {
-                    CustomerID= data.CustomerID,
-                    OrderTime= data.OrderTime,
-                    DeliveryProvince= data.DeliveryProvince??"",
-                    DeliveryAddress= data.DeliveryAddress??"",
-                    EmployeeID= data.EmployeeID,
-                    Status= data.Status,
+                    CustomerId = data.CustomerID,
+                    DeliveryProvince = data.DeliveryProvince ?? "",
+                    DeliveryAddress = data.DeliveryAddress ?? "",
+                    EmployeeId = data.EmployeeID,
+                    Status = data.Status,
                 };
-                id = connection.ExecuteScalar<int>(sql:sql, param: parameters,commandType:CommandType.Text);
+                id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
             }
             return id;
         }
@@ -40,29 +45,33 @@ namespace SV21T1020171.DataLayers.SQLServer
                 searchValue = "%" + searchValue + "%";
             using (var connection = OpenConnection())
             {
-                var sql = @"select count(*) from Orders as o 
-                        left join Customers as c on o.CustomerID = c.CustomerID
-                        left join Employees as e on o.EmployeeID = e.EmployeeID
-                        left join Shippers as s on o.ShipperID = s.ShipperID
-                        where (@Status = 0 or o.Status = @Status)
-                        and (@FromTime is null or o.OrderTime >= @FromTime)
-                        and (@ToTime is null or o.OrderTime <= @ToTime)
-                        and (@SearchValue = N''
-                        or c.CustomerName like @SearchValue
-                        or e.FullName like @SearchValue
-                        or s.ShipperName like @SearchValue)";
+                var sql = @"select count(*)
+                            from Orders as o
+                            left join Customers as c on o.CustomerID = c.CustomerID
+                            left join Employees as e on o.EmployeeID = e.EmployeeID
+                            left join Shippers as s on o.ShipperID = s.ShipperID
+
+                            where (@Status = 0 or o.Status = @Status)
+                            and (@FromTime is null or o.OrderTime >= @FromTime)
+                            and (@ToTime is null or o.OrderTime <= @ToTime)
+                            and (@SearchValue = N''
+                            or c.CustomerName like @SearchValue
+                            or e.FullName like @SearchValue
+                            or s.ShipperName like @SearchValue)"
+                ;
+
                 var parameters = new
                 {
-                    searchValue = $"%{searchValue}%",
-                    status= status,
-                    fromTime = fromTime,
-                    toTime = toTime,
+                    Status = status,
+                    FromTime = fromTime,
+                    ToTime = toTime,
+                    SearchValue = searchValue ?? ""
                 };
-                count = connection.ExecuteScalar<int>(sql:sql, param:parameters,commandType:CommandType.Text);
+                count = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
             }
-           return count;
+            return count;
         }
-
         public bool Delete(int orderID)
         {
             bool result = false;
@@ -70,33 +79,34 @@ namespace SV21T1020171.DataLayers.SQLServer
             {
                 var sql = @"delete from OrderDetails where OrderID = @OrderID;
                             delete from Orders where OrderID = @OrderID";
+
                 var parameters = new
                 {
-                    orderID = orderID,
+                    OrderID = orderID,
                 };
-                result = connection.Execute(sql:sql,param:parameters,commandType:CommandType.Text)>0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
             }
             return result;
         }
-
         public bool DeleteDetail(int orderID, int productID)
         {
             bool result = false;
             using (var connection = OpenConnection())
             {
                 var sql = @"delete from OrderDetails
-
                             where OrderID = @OrderID and ProductID = @ProductID";
 
                 var parameters = new
                 {
-                    orderID = orderID,
+                    OrderID = orderID,
+                    ProductID = productID,
                 };
-                result = connection.Execute(sql:sql, param:parameters,commandType: CommandType.Text)>0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
             }
             return result;
         }
-
         public Order? Get(int orderID)
         {
             Order? data = null;
@@ -104,7 +114,6 @@ namespace SV21T1020171.DataLayers.SQLServer
             {
                 var sql = @"select o.*,
                             c.CustomerName,
-
                             c.ContactName as CustomerContactName,
                             c.Address as CustomerAddress,
                             c.Phone as CustomerPhone,
@@ -112,41 +121,45 @@ namespace SV21T1020171.DataLayers.SQLServer
                             e.FullName as EmployeeName,
                             s.ShipperName,
                             s.Phone as ShipperPhone
-                       from Orders as o
+
+                            from Orders as o
                             left join Customers as c on o.CustomerID = c.CustomerID
+
                             left join Employees as e on o.EmployeeID = e.EmployeeID
                             left join Shippers as s on o.ShipperID = s.ShipperID
 
-                       where o.OrderID = @OrderID";
+                            where o.OrderID = @OrderID";
                 var parameters = new
                 {
-                    OrderId=orderID,
+                    OrderID = orderID,
                 };
                 data = connection.QueryFirstOrDefault<Order>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
             }
             return data;
         }
-
         public OrderDetail? GetDetail(int orderID, int productID)
         {
             OrderDetail? data = null;
             using (var connection = OpenConnection())
             {
-                var sql = @"select   od.*, p.ProductName, p.Photo, p.Unit
-                             from    OrderDetails as od
-                                     join Products as p on od.ProductID = p.ProductID
-                             where  od.OrderID = @OrderID and od.ProductID = @ProductID";
+                var sql = @"select od.*, p.ProductName, p.Photo, p.Unit
+                            from OrderDetails as od
+                            join Products as p on od.ProductID = p.ProductID
+                            where od.OrderID = @OrderID and od.ProductID = @ProductID";
                 var parameters = new
                 {
                     OrderID = orderID,
                     ProductID = productID
                 };
-                data = connection.QueryFirstOrDefault<OrderDetail>(sql:sql,param:parameters, commandType: CommandType.Text);
+                data = connection.QueryFirstOrDefault<OrderDetail>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
             }
             return data;
         }
+        public IList<Order> List(int page = 1, int pageSize = 0,
+        int status = 0, DateTime? fromTime = null, DateTime? toTime = null, string searchValue = "")
 
-        public IList<Order> List(int page = 1, int pageSize = 0, int status = 0, DateTime? fromTime = null, DateTime? toTime = null, string searchValue = "")
         {
             List<Order> list = new List<Order>();
             if (!string.IsNullOrEmpty(searchValue))
@@ -155,46 +168,49 @@ namespace SV21T1020171.DataLayers.SQLServer
             {
                 var sql = @"with cte as
                     (
-                      select    row_number() over(order by o.OrderTime desc) as RowNumber,
-                                o.*,
+                    select row_number() over(order by o.OrderTime desc) as RowNumber,
+                    o.*,
 
-                                c.CustomerName,
-                                c.ContactName as CustomerContactName,
-                                c.Address as CustomerAddress,
-                                c.Phone as CustomerPhone,
-                                c.Email as CustomerEmail,
-                                e.FullName as EmployeeName,
-                                s.ShipperName,
-                                s.Phone as ShipperPhone
+                    c.CustomerName,
+                    c.ContactName as CustomerContactName,
+                    c.Address as CustomerAddress,
+                    c.Phone as CustomerPhone,
+                    c.Email as CustomerEmail,
+                    e.FullName as EmployeeName,
+                    s.ShipperName,
+                    s.Phone as ShipperPhone
 
-                      from Orders as o
-                                left join Customers as c on o.CustomerID = c.CustomerID
-                                left join Employees as e on o.EmployeeID = e.EmployeeID
-                                left join Shippers as s on o.ShipperID = s.ShipperID
+                    from Orders as o
+                    left join Customers as c on o.CustomerID = c.CustomerID
+                    left join Employees as e on o.EmployeeID = e.EmployeeID
+                    left join Shippers as s on o.ShipperID = s.ShipperID
 
-                      where (@Status = 0 or o.Status = @Status)
-                                and (@FromTime is null or o.OrderTime >= @FromTime)
-                                and (@ToTime is null or o.OrderTime <= @ToTime)
-                                and (@SearchValue = N''
-                                or c.CustomerName like @SearchValue
-                                or e.FullName like @SearchValue
-                                or s.ShipperName like @SearchValue)
+                    where (@Status = 0 or o.Status = @Status)
+                    and (@FromTime is null or o.OrderTime >= @FromTime)
+                    and (@ToTime is null or o.OrderTime <= @ToTime)
+                    and (@SearchValue = N''
+                    or c.CustomerName like @SearchValue
+                    or e.FullName like @SearchValue
+                    or s.ShipperName like @SearchValue)
 
-                       )
-                        select * from cte
-                        where (@PageSize = 0)
-                             or (RowNumber between (@Page - 1) * @PageSize + 1 and @Page * @PageSize)
-                        order by RowNumber";
+                    )
+                    select * from cte
+                    where (@PageSize = 0)
+
+                    or (RowNumber between (@Page - 1) * @PageSize + 1 and @Page * @PageSize)
+
+                    order by RowNumber";
                 var parameters = new
                 {
-                    page=page,
-                    pageSize=pageSize,
-                    status=status,  
-                    fromTime=fromTime,
-                    toTime=toTime,
-                    searchValue = $"%{searchValue}%",
+                    Page = page,
+                    PageSize = pageSize,
+                    SearchValue = searchValue ?? "",
+                    Status = status,
+                    FromTime = fromTime,
+                    ToTime = toTime
                 };
-                list=connection.Query<Order>(sql:sql,param:parameters,commandType:CommandType.Text).ToList();
+                list = connection.Query<Order>(sql: sql, param: parameters, commandType: CommandType.Text).ToList();
+                connection.Close();
             }
             return list;
         }
@@ -206,26 +222,21 @@ namespace SV21T1020171.DataLayers.SQLServer
             {
                 var sql = @"select od.*, p.ProductName, p.Photo, p.Unit
                             from OrderDetails as od
-                                join Products as p on od.ProductID = p.ProductID
+                            join Products as p on od.ProductID = p.ProductID
                             where od.OrderID = @OrderID";
                 var parameters = new
                 {
-                    orderID = orderID,
+                    OrderID = orderID,
                 };
-                list = connection.Query<OrderDetail>(sql:sql,param:parameters,commandType: CommandType.Text).ToList();
+                list = connection.Query<OrderDetail>(sql: sql, param: parameters, commandType: CommandType.Text).ToList();
+                connection.Close();
             }
             return list;
         }
 
         public IList<OrderStatus> ListOrderStatus()
         {
-            List<OrderStatus>list = new List<OrderStatus>();
-            using(var connection = OpenConnection())
-            {
-                var sql = @"Select * from OrderStatus";
-                list = connection.Query<OrderStatus>(sql:sql,commandType:CommandType.Text).ToList();
-            }
-            return list;
+            throw new NotImplementedException();
         }
 
         public bool SaveDetail(int orderID, int productID, int quantity, decimal salePrice)
@@ -234,26 +245,28 @@ namespace SV21T1020171.DataLayers.SQLServer
             using (var connection = OpenConnection())
             {
                 var sql = @"if exists(select * from OrderDetails
-                                      where OrderID = @OrderID and ProductID = @ProductID)
-                               update OrderDetails
-                               set Quantity = @Quantity,
-                                       SalePrice = @SalePrice
-                               where OrderID = @OrderID and ProductID = @ProductID
-                           else
-                               insert into OrderDetails(OrderID, ProductID, Quantity, SalePrice)
-                               values(@OrderID, @ProductID, @Quantity, @SalePrice)";
+                            where OrderID = @OrderID and ProductID = @ProductID)
+
+                            update OrderDetails
+                            set Quantity = @Quantity,
+                            SalePrice = @SalePrice
+                            where OrderID = @OrderID and ProductID = @ProductID
+
+                            else
+                            insert into OrderDetails(OrderID, ProductID, Quantity, SalePrice)
+                            values(@OrderID, @ProductID, @Quantity, @SalePrice)";
                 var parameters = new
                 {
-                    orderID = orderID,
-                    productID = productID,
-                    quantity = quantity,
-                    salePrice = salePrice
+                    OrderID = orderID,
+                    ProductID = productID,
+                    Quantity = quantity,
+                    SalePrice = salePrice
                 };
-                result = connection.ExecuteScalar<int>(sql:sql,param:parameters,commandType:CommandType.Text)>0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
             }
             return result;
         }
-
         public bool Update(Order data)
         {
             bool result = false;
@@ -275,17 +288,18 @@ namespace SV21T1020171.DataLayers.SQLServer
                 {
                     CustomerID = data.CustomerID,
                     OrderTime = data.OrderTime,
-                    DeliveryProvince = data.DeliveryProvince??"",
-                    DeliveryAddress = data.DeliveryAddress??"",
+                    DeliveryProvince = data.DeliveryProvince ?? "",
+                    DeliveryAddress = data.DeliveryAddress ?? "",
                     EmployeeID = data.EmployeeID,
                     AcceptTime = data.AcceptTime,
                     ShipperID = data.ShipperID,
-                    FinishedTime = data.FinishedTime,
                     ShippedTime = data.ShippedTime,
+                    FinishedTime = data.FinishedTime,
                     Status = data.Status,
-                    OrderID = data.OrderID,
+                    OrderID = data.OrderID
                 };
-                result = connection.Execute(sql:sql,param:parameters, commandType:CommandType.Text)>0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
             }
             return result;
         }

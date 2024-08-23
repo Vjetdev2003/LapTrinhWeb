@@ -3,7 +3,13 @@ using SV21T1020171.BusinessLayers;
 using SV21T1020171.Web.Models;
 using SV21T1020171.Web;
 using SV21T1020171.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 
+
+namespace SV21T1020171.Web.Controllers
+{
+
+     [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
 public class OrderController : Controller
 {
     private const int ORDER_PAGE_SIZE = 20;
@@ -32,21 +38,32 @@ public class OrderController : Controller
     }
     public IActionResult Search(OrderSearchInput input)
     {
-        int rowCount = 0;
-        var data = OrderDataService.ListOrders(out rowCount, input.Page, input.PageSize,input.Status,input.ToTime,input.FromTime, input.SearchValue ?? "");
-        var model = new OrderSearchResult()
-        {
-            Page = input.Page,
-            PageSize = input.PageSize,
-            SearchValue = input.SearchValue ?? "",
-            RowCount = rowCount,
-            Data = data,
+            int rowCount = 0;
 
-        };
-        ApplicationContext.SetSessionData(ORDER_SEARCH, input);
-        return View(model);
-    }
-    public IActionResult Details(int id=0)
+            var data = OrderDataService.ListOrders(out rowCount, input.Page, input.PageSize,
+                input.Status, input.FromTime, input.ToTime, input.SearchValue ?? "");
+
+            var model = new OrderSearchResult()
+            {
+                Page = input.Page,
+                PageSize = input.PageSize,
+                SearchValue = input.SearchValue ?? "",
+                Status = input.Status,
+                TimeRange = input.DateRange ?? "",
+                RowCount = rowCount,
+                Data = data
+            };
+
+            ApplicationContext.SetSessionData(ORDER_SEARCH, input);
+
+            return View(model);
+        }
+    /// <summary>
+    /// Xem chi tiết đơn hàng
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public IActionResult Details(int id = 0)
     {
         ViewBag.IsFinish = false;
         ViewBag.IsDelete = false;
@@ -85,14 +102,15 @@ public class OrderController : Controller
                 break;
 
         }
-        if (order == null)
-            return RedirectToAction("Index");
+
         var details = OrderDataService.ListOrderDetails(id);
         var model = new OrderDetailModel()
         {
-           Order=order,
-           Details=details
+            Order = order,
+            Details = details
         };
+
+        if (TempData["Message"] != null) ViewBag.Message = TempData["Message"];
         return View(model);
     }
     /// <summary>
@@ -319,38 +337,38 @@ public class OrderController : Controller
         return View(model);
     }
 
-    /// <summary>
-    /// Cập nhật địa chỉ và tỉnh thành giao trong đơn hàng.
-    /// Hàm trả về chuỗi khác rỗng thông báo lỗi nếu đầu vào không hợp lệ hoặc lỗi,
-    /// hàm trả về chuỗi rỗng nếu thành công
-    /// </summary>
-    /// <param name="orderID"></param>  
-    /// <param name="deliveryAddress"></param>
-    /// <param name="deliveryProvince"></param>
-    /// <returns></returns>
-    [HttpPost]
-    public IActionResult UpdateAddress(int orderID, string deliveryAddress, string deliveryProvince)
-    {
-        if (string.IsNullOrWhiteSpace(deliveryAddress))
-            return Json("Vui lòng nhập địa chỉ");
+        /// <summary>
+        /// Cập nhật địa chỉ và tỉnh thành giao trong đơn hàng.
+        /// Hàm trả về chuỗi khác rỗng thông báo lỗi nếu đầu vào không hợp lệ hoặc lỗi,
+        /// hàm trả về chuỗi rỗng nếu thành công
+        /// </summary>
+        /// <param name="orderID"></param>  
+        /// <param name="deliveryAddress"></param>
+        /// <param name="deliveryProvince"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult UpdateAddress(int orderID, string deliveryAddress, string deliveryProvince)
+        {
+            if (string.IsNullOrWhiteSpace(deliveryAddress))
+                return Json(new { success = false, message = "Vui lòng nhập địa chỉ" });
 
-        if (string.IsNullOrEmpty(deliveryProvince))
-            return Json("Vui lòng chọn tỉnh thành");
+            if (string.IsNullOrEmpty(deliveryProvince))
+                return Json(new { success = false, message = "Vui lòng chọn tỉnh thành" });
 
-        bool result = OrderDataService.SaveOrderAddress(orderID, deliveryAddress, deliveryProvince);
+            bool result = OrderDataService.SaveOrderAddress(orderID, deliveryAddress, deliveryProvince);
 
-        if (!result)
-            return Json("Không được phép thay đổi thông tin của đơn hàng này");
+            if (!result)
+                return Json(new { success = false, message = "Không được phép thay đổi thông tin của đơn hàng này" });
 
-        return RedirectToAction("Details");
-    }
-    /// <summary>
-    /// Xoá mặt hàng ra khỏi đơn hàng 
-    /// </summary>
-    /// <param name="id">Mã đơn hàng</param>
-    /// <param name="productId">Mã mặt hàng cần tìm</param>
-    /// <returns></returns>
-    public IActionResult DeleteDetail(int id=0,int productId=0) 
+            return Json(new { success = true, redirectUrl = Url.Action("Details") });
+        }
+        /// <summary>
+        /// Xoá mặt hàng ra khỏi đơn hàng 
+        /// </summary>
+        /// <param name="id">Mã đơn hàng</param>
+        /// <param name="productId">Mã mặt hàng cần tìm</param>
+        /// <returns></returns>
+        public IActionResult DeleteDetail(int id=0,int productId=0) 
     { 
         bool result =OrderDataService.DeleteOrderDetail(id, productId);
         if (!result)
@@ -369,15 +387,16 @@ public class OrderController : Controller
         var model = OrderDataService.GetOrderDetail(id, productId);
         return View(model);
     }
-    public IActionResult UpdateDetail(int orderId,int productId,int quatity,decimal salePrice)
+    [HttpPost]
+    public IActionResult UpdateDetail(int orderId,int productId,int quantity,decimal salePrice)
     {
-        if(quatity <= 0)
+        if(quantity <= 0)
         {
             return Json("Số lượng bán không hợp lệ");
         }
         if(salePrice < 0) 
             return Json("Giá bán không hợp lệ");
-        bool result = OrderDataService.SaveOrderDetail(orderId, productId, quatity, salePrice);
+        bool result = OrderDataService.SaveOrderDetail(orderId, productId, quantity, salePrice);
         if (!result)
             return Json("Không được phép thay đổi thông tin của đơn hàng này ");
         return Json("");
@@ -393,17 +412,24 @@ public class OrderController : Controller
     /// <returns></returns>
     public IActionResult Init(int customerID=0,string deliveryProvince="",string deliveryAddress = "")
     {
-        var shoppingCart = GetShoppingCart();
-        if (shoppingCart.Count == 0)
-            return Json("Giỏ hàng trống không thể lập đơn hàng");
-        if (customerID <= 0 || string.IsNullOrWhiteSpace(deliveryProvince)
-                          || string.IsNullOrWhiteSpace(deliveryAddress))
-            return Json("Vui lòng nhập đầy đủ thông tin");
-        int employeeID=Convert.ToInt32(User.GetUserData()?.UserId);
-        int orderID = OrderDataService.InitOrder(employeeID, customerID, deliveryProvince, deliveryAddress, shoppingCart);
+            var shoppingCart = GetShoppingCart();
+            if (shoppingCart.Count == 0)
+                return Json("Giỏ hàng trống, không thể lập đơn hàng");
 
-        ClearCart();
-        return Json(orderID);  
+            var lockedCustomer = CommonDataService.GetCustomer(customerID)?.IsLocked;
+            if (lockedCustomer == true)
+                return Json("Khách hàng này đang bị khóa");
+
+            if (customerID <= 0 || string.IsNullOrWhiteSpace(deliveryProvince)
+                                || string.IsNullOrWhiteSpace(deliveryAddress))
+                return Json("Vui lòng nhập đầy đủ thông tin");
+
+            int employeeID = Convert.ToInt32(User.GetUserData()?.UserId);
+            int orderID = OrderDataService.InitOrder(employeeID, customerID, deliveryProvince, deliveryAddress, shoppingCart);
+
+            ClearCart();
+
+            return Json(orderID);
+        }
     }
-
 }

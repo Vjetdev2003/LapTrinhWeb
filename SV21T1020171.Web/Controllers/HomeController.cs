@@ -3,6 +3,7 @@ using SV21T1020171.Web.Models;
 using System.Diagnostics;
 namespace SV21T1020171.Web.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -4,9 +4,8 @@
 }
 @foreach (var item in Model.Data)
 {
-    <form class="formAddToCart" action="~/Order/AddToCart" method="post" class="form-horizontal"
-          style="background-color:#fff;
-border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
+    <form class="formAddToCart" action="~/Order/AddToCart" method="post"
+          style="background-color:#fff;border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
         <input type="hidden" name="ProductID" value="@item.ProductID" />
         <input type="hidden" name="ProductName" value="@item.ProductName" />
         <input type="hidden" name="Photo" value="@item.Photo" />
@@ -19,7 +18,7 @@ border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
         <div class="row">
             <div class="col-sm-3">
                 <img class="img img-responsive img-bordered"
-                     src="~/images/product/@item.Photo" alt="NoPhoto">
+                     src="~/images/products/@item.Photo" alt="NoPhoto">
             </div>
             <div class="col-sm-9">
                 <div class="form-group-sm">
@@ -46,8 +45,6 @@ border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
         </div>
     </form>
 }
-
-
 @if (Model.PageCount > 1)
 {
     <ul class="pager">
@@ -69,6 +66,8 @@ border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
         }
     </ul>
 }
+
+
 <script>
     $(document).ready(function () {
         $(".formAddToCart").submit(function (e) {
@@ -89,7 +88,6 @@ border:1px solid #ccc; margin:5px 0px 5px 0px; padding:5px;">
                         alert(data);
                     }
                     else {
-
                         showShoppingCart();
                     }
                 }

@@ -63,5 +63,37 @@ namespace SV21T1020171.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
+        public IActionResult ChangePassword(string oldPassword = "", string newPassword = "", string reNewPassword = "")
+        {
+            ViewBag.Title = "Đổi Mật Khẩu";
+            if (Request.Method == "POST") {
+                //Kiểm tra xem có nhập đầy đủ thông tin không ?
+                if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(reNewPassword))
+                {
+                    ModelState.AddModelError("Error", "Vui lòng nhập lại thông tin");
+                    return View();
+                }
+                //Kiểm tra xem mật khẩu có trùng với mật khẩu mới không ?
+                if (!newPassword.Equals(reNewPassword)) {
+                    ModelState.AddModelError("Error", "Mật khẩu mới không trùng khớp");
+                    return View();
+                }
+                var userData = User.GetUserData();
+                if (userData != null) {
+                    var result = UserAccountService.ChangePassword(userData.UserName, oldPassword, newPassword);
+                    if (!result)
+                    {
+                        ModelState.AddModelError("Error", "Mật khẩu cũ không đúng");
+                        return View();
+                    }
+                    return RedirectToAction("Logout");
+                }
+            }
+            return View();
+        }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

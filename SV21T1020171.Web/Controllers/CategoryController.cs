@@ -6,7 +6,7 @@ using SV21T1020171.Web.Models;
 
 namespace SV21T1020171.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class CategoryController : Controller
     {
        private const int PAGE_SIZE = 9;
