@@ -225,9 +225,6 @@ namespace SV21T1020171.BusinessLayers
         /// Danh sách trạng thái đơn hàng
         /// </summary>
         /// <returns></returns>
-        public static IList<OrderStatus> ListOrderStatus()
-        {
-            return orderDB.ListOrderStatus();
-        }
+      
     }
 }

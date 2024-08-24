@@ -16,16 +16,17 @@
                             Xử lý đơn hàng <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
+
                             @switch (Model.Order.Status)
                             {
-                                case SV21T1020171.DomainModels.Constants.ORDER_INIT:
+                                case Constants.ORDER_INIT:
                                     <li><a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a></li>
                                     <li><a href="~/Order/Accept/@Model.Order.OrderID" onclick="return confirm('Xác nhận duyệt chấp nhận đơn hàng này?')">Duyệt đơn hàng</a></li>
                                     <li class="divider"></li>
                                     <li><a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a></li>
                                     <li><a href="~/Order/Reject/@Model.Order.OrderID" onclick="return confirm('Xác nhận từ chối đơn hàng này?')">Từ chối đơn hàng</a></li>
                                     break;
-                                case SV21T1020171.DomainModels.Constants.ORDER_ACCEPTED:
+                                case Constants.ORDER_ACCEPTED:
                                     <li><a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a></li>
                                     <li><a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">Chuyển giao hàng</a></li>
                                     <li class="divider"></li>
@@ -48,66 +49,55 @@
             }
             <a href="~/Order" class="btn btn-sm btn-info">Quay lại</a>
         </div>
-
-
     </div>
     <div class="box-body form-horizontal">
-        @if (ViewBag.Message != null)
-        {
-            <div class="form-group">
-                <label class="control-label col-sm-2"></label>
-                <div class="col-sm-4">
-                    <span id="message" style="color:#f00">@ViewBag.Message</span>
-                </div>
-            </div>
-        }
-
+ 
         <div class="form-group">
             <label class="control-label col-sm-2">Mã đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.OrderID</p>
+                <p class="form-control">@Model.Order.OrderID</p>
             </div>
             <label class="control-label col-sm-2">Ngày lập đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.OrderTime.ToString("dd/MM/yyyy")</p>
+                <p class="form-control">@Model.Order.OrderTime.ToString("dd/MM/yyyy")</p>
             </div>
             <label class="control-label col-sm-2">Nhân viên phụ trách:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.EmployeeName</p>
+                <p class="form-control">@Model.Order.EmployeeName</p>
             </div>
             <label class="control-label col-sm-2">Ngày nhận đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.AcceptTime?.ToString("dd/MM/yyyy")</p>
+                <p class="form-control">@Model.Order.AcceptTime?.ToString("dd/MM/yyyy")</p>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2">Khách hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.CustomerName</p>
+                <p class="form-control">@Model.Order.CustomerName</p>
             </div>
             <label class="control-label col-sm-2">Tên giao dịch:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.CustomerContactName</p>
+                <p class="form-control">@Model.Order.CustomerContactName</p>
             </div>
             <label class="control-label col-sm-2">Địa chỉ:</label>
             <div class="col-sm-10">
-                <p class="form-control-static">@Model.Order.CustomerAddress</p>
+                <p class="form-control">@Model.Order.CustomerAddress</p>
             </div>
             <label class="control-label col-sm-2">Email:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.CustomerEmail</p>
+                <p class="form-control">@Model.Order.CustomerEmail</p>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2">Địa chỉ giao hàng:</label>
             <div class="col-sm-10">
-                <p class="form-control-static">@Model.Order.DeliveryAddress</p>
+                <p class="form-control">@Model.Order.DeliveryAddress</p>
             </div>
             <label class="control-label col-sm-2">Tỉnh/thành:</label>
             <div class="col-sm-5">
-                <p class="form-control-static" style="display: inline-block">@Model.Order.DeliveryProvince</p>
+                <p class="form-control" style="display: inline-block">@Model.Order.DeliveryProvince</p>
             </div>
 
         </div>
@@ -115,26 +105,26 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Người giao hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.ShipperName</p>
+                <p class="form-control">@Model.Order.ShipperName</p>
             </div>
             <label class="control-label col-sm-2">Điện thoại:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.ShipperPhone</p>
+                <p class="form-control">@Model.Order.ShipperPhone</p>
             </div>
             <label class="control-label col-sm-2">Nhận giao hàng lúc:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.ShippedTime?.ToString("dd/MM/yyyy")</p>
+                <p class="form-control">@Model.Order.ShippedTime?.ToString("dd/MM/yyyy")</p>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2">Trạng thái đơn hàng:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.StatusDescription</p>
+                <p class="form-control">@Model.Order.StatusDescription</p>
             </div>
             <label class="control-label col-sm-2">Thời điểm hoàn tất:</label>
             <div class="col-sm-4">
-                <p class="form-control-static">@Model.Order.FinishedTime?.ToString("dd/MM/yyyy")</p>
+                <p class="form-control">@Model.Order.FinishedTime?.ToString("dd/MM/yyyy")</p>
             </div>
         </div>
     </div>

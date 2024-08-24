@@ -127,6 +127,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                     searchValue = $"%{searchValue}%"
                 };
                 data = connection.Query<Shipper>(sql: sql, param: parameters, commandType: CommandType.Text).ToList();
+                connection.Close();
+
             }
             return data;
         }

@@ -71,6 +71,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                 result= connection.Execute(sql:sql,param:parameters,commandType:CommandType.Text)>0;
             };
             return result;
+           
         }
 
         public Customer? Get(int id)
@@ -131,6 +132,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                     searchValue = $"%{searchValue}%"
                 };
                 data = connection.Query<Customer>(sql:sql, param:parameters,commandType:CommandType.Text).ToList();
+                connection.Close();
             }
             return data;
         }

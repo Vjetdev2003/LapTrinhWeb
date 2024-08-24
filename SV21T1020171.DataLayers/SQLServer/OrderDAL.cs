@@ -233,12 +233,6 @@ namespace SV21T1020171.DataLayers.SQLServer
             }
             return list;
         }
-
-        public IList<OrderStatus> ListOrderStatus()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool SaveDetail(int orderID, int productID, int quantity, decimal salePrice)
         {
             bool result = false;

@@ -4,6 +4,8 @@ using SV21T1020171.Web.Models;
 using SV21T1020171.Web;
 using SV21T1020171.DomainModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System;
 
 
 namespace SV21T1020171.Web.Controllers
@@ -58,14 +60,19 @@ public class OrderController : Controller
 
             return View(model);
         }
-    /// <summary>
-    /// Xem chi tiết đơn hàng
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+        /// <summary>
+        /// Xem chi tiết đơn hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// Trong trường hợp này, TempData["Message"] được sử dụng để lưu trữ thông báo từ một action trước đó,
+        /// ví dụ như thông báo sau khi cập nhật thành công địa chỉ hoặc xử lý đơn hàng. Khi trang chi tiết đơn hàng (Details) được tải, 
+        /// TempData truyền dữ liệu thông báo đó đến view, và ViewBag.Message sẽ được sử dụng để hiển thị thông báo này.
+        // Nếusử dụng ViewBag thay vì TempData, thông báo sẽ không tồn tại sau khi chuyển hướng từ action xử lý trước đó đến action Details.
+        //Vì vậy, TempData là lựa chọn hợp lý trong tình huống này
     public IActionResult Details(int id = 0)
-    {
-        ViewBag.IsFinish = false;
+        {
+            ViewBag.IsFinish = false;
         ViewBag.IsDelete = false;
         ViewBag.IsEmployee = false;
         ViewBag.IsEditDetails = false;
@@ -207,14 +214,15 @@ public class OrderController : Controller
         [HttpPost]
         public IActionResult Shipping(int id = 0, int shipperId = 0)
         {
+            //trả về success là false với message nếu như Id không hợp lệ
             if (shipperId <= 0)
                 return Json(new { success = false, message = "Vui lòng chọn người giao hàng" });
 
             bool result = OrderDataService.ShipOrder(id, shipperId);
-
+            //Nếu trả về false nghĩa là đơn hàng không thể giao cho người giao hàng(Do Status hoặc lý do khác ) 
             if (!result)
                 return Json(new { success = false, message = "Đơn hàng không cho phép chuyển cho người giao hàng" });
-
+            //True tạo đường dẫn chuyển trang đến Details
             return Json(new { success = true, redirectUrl = Url.Action("Details", new { id }) });
         }
         /// <summary>
@@ -298,7 +306,7 @@ public class OrderController : Controller
         else
         {
             existsProduct.Quantity += data.Quantity;
-            existsProduct.SalePrice += data.SalePrice;
+          
 
         }
         ApplicationContext.SetSessionData(SHOPPING_CART,shoppingCart);
@@ -309,7 +317,7 @@ public class OrderController : Controller
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public IActionResult RemoveToCart(int id =0) { 
+    public IActionResult RemoveFromCart(int id =0) { 
         var shoppingCart = GetShoppingCart();
         int index =shoppingCart.FindIndex(m=>m.ProductID==id);
         if(index >= 0)

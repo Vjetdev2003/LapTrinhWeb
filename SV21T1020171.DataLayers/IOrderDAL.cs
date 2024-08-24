@@ -9,7 +9,6 @@ namespace SV21T1020171.DataLayers
 {
     public interface IOrderDAL
     {
-        IList<OrderStatus> ListOrderStatus();
         /// <summary>
         /// Tìm kiếm và lấy danh sách đơn hàng dưới dạng phân trang
         /// </summary>

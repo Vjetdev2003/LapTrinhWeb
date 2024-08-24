@@ -36,6 +36,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                     IsSelling = data.IsSelling
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
+
             }
             return id;
         }
@@ -123,6 +125,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                     ProductId = productID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;
+                connection.Close();
+
             }
             return result;
         }
@@ -164,6 +168,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                     productID = productID
                 };
                 data = connection.QueryFirstOrDefault<Product>(sql:sql, param: parameters, commandType: CommandType.Text);
+                connection.Close();
+
             }
             return data;
         }
@@ -220,8 +226,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                                         SELECT 0;";
                 var param = new { ProductID = productID };
                 int count = connection.ExecuteScalar<int>(sql, param, commandType: CommandType.Text);
-                connection.Close();
                 result = count > 0;
+                connection.Close();
             }
             return result;
         }
@@ -310,7 +316,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                     IsSelling = data.IsSelling,
                     ProductId=data.ProductID
                 };
-                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0;
+                result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text)>0; 
+                connection.Close();
             }
             return result;
         }
