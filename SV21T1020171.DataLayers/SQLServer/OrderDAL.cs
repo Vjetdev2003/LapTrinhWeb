@@ -233,6 +233,18 @@ namespace SV21T1020171.DataLayers.SQLServer
             }
             return list;
         }
+
+        public IList<OrderStatus> OrderStatus()
+        {
+            List<OrderStatus> list = new List<OrderStatus>();
+            using (var connection = OpenConnection()) {
+                var sql = @"Select * from OrderStatus";
+                list = connection.Query<OrderStatus>(sql: sql, commandType: CommandType.Text).ToList();
+                connection.Close();
+            }
+            return list;
+        }
+
         public bool SaveDetail(int orderID, int productID, int quantity, decimal salePrice)
         {
             bool result = false;

@@ -10,7 +10,7 @@ namespace SV21T1020171.Web.Controllers
    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
     public class CustomerController : Controller
     {
-        private const int PAGE_SIZE = 9;
+        private const int PAGE_SIZE = 20;
         private const string SEARCH_CONDITION = "customers_search";
         public IActionResult Index()
         {

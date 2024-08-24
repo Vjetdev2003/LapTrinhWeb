@@ -49,6 +49,10 @@ namespace SV21T1020171.Web.Models
     public class ProductSearchResult : PaginationSearchResult
     {
         public required List<Product> Data { get; set; }
+        public  decimal MinPrice {  get; set; }
+        public  decimal MaxPrice { get; set; }
+        public  int CategoryID { get; set; }
+        public  int SupplierID { get; set; }
     }
     public class OrderSearchResult : PaginationSearchResult
     {

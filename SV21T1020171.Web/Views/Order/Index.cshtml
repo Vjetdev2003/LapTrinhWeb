@@ -10,7 +10,20 @@
             <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
             <div class="row container-fluid">
                 <div class="col-sm-2">
-                    @Html.DropDownListFor(m => m.Status, SelectListHelper.Status(), new { @class = "form-control" })
+                    <select class="form-control" name="@nameof(Model.Status)">
+                        @foreach(var item in SelectListHelper.Status())
+                        {
+                            if (Model.Status == int.Parse(item.Value))
+                            {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                    <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+
+                    </select>
                 </div>
                 <div class="col-sm-2">
                     <input type="text" name="@nameof(Model.DateRange)" class="form-control daterange-picker" placeholder="" value="@Model.DateRange" />

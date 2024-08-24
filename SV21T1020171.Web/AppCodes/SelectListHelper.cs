@@ -14,7 +14,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn tỉnh/thành --"
             });
             foreach (var item in CommonDataService.ListofProvinces())
@@ -37,7 +37,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn loại hàng --"
             });
             int rowCount;
@@ -61,7 +61,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn nhà cung cấp --"
             });
             int rowCount;
@@ -85,7 +85,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn khách hàng --"
             });
             int rowCount;
@@ -105,7 +105,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn người giao hàng --"
             });
             int rowCount;
@@ -129,7 +129,7 @@ namespace SV21T1020171.Web
             List<SelectListItem> list = new List<SelectListItem>();
             list.Add(new SelectListItem()
             {
-                Value = "",
+                Value = "0",
                 Text = "-- Chọn nhân viên --"
             });
             int rowCount;
@@ -201,36 +201,13 @@ namespace SV21T1020171.Web
                 Value = "0",
                 Text = "-- Trạng thái --",
             });
-            list.Add(new SelectListItem()
-            {
-                Value = "1",
-                Text = "Đơn hàng mới(chờ duyệt)",
-            });
-            list.Add(new SelectListItem()
-            {
-                Value = "2",
-                Text = "Đơn hàng đã duyệt (chờ chuyển hàng)",
-            });
-            list.Add(new SelectListItem()
-            {
-                Value = "3",
-                Text = "Đơn hàng đang được giao",
-            });
-            list.Add(new SelectListItem()
-            {
-                Value = "4",
-                Text = "Đơn hàng đã hoàn tất thành công",
-            });
-            list.Add(new SelectListItem()
-            {
-                Value = "-1",
-                Text = "Đơn hàng bị hủy",
-            });
-            list.Add(new SelectListItem()
-            {
-                Value = "-2",
-                Text = "Đơn hàng bị từ chối",
-            });
+            foreach(var item in OrderDataService.ListStatus()){
+                list.Add(new SelectListItem()
+                {
+                    Value = item.Status.ToString(),
+                    Text = item.Description
+                });
+            }
             return list;
         }
 

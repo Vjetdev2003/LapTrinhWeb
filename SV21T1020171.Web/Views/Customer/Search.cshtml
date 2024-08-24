@@ -30,7 +30,7 @@
                         <td>@item.Email</td>
                         <td>@item.Address</td>
                         <td>@item.Province</td>
-                        <td class="text-center">@(item.IsLocked ? "🔒" : "")</td>
+                        <td class="text-center">@(item.IsLocked ? "Bị khoá" : "Không bị khoá")</td>
                         <td class="text-right">
                             <a class="btn btn-info btn-xs" href="~/Customer/Edit/@item.CustomerID">
                                 <i class="fa fa-edit"></i>

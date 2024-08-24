@@ -24,7 +24,11 @@ namespace SV21T1020171.Web.Controllers
                 {
                     Page = 1,
                     PageSize = PAGE_SIZE,
-                    SearchValue = ""
+                    SearchValue = "",
+                    MaxPrice = 0,
+                    MinPrice = 0,
+                    CategoryID=0,
+                    SupplierID=0,
                 };
             }
             return View(input);
@@ -32,7 +36,7 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Search(ProductSearchInput input)
         {
             int rowCount = 0;
-            var data = ProductDataService.ListProducts(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "");
+            var data = ProductDataService.ListProducts(out rowCount, input.Page, input.PageSize, input.SearchValue ?? "",input.SupplierID,input.CategoryID,input.MinPrice,input.MaxPrice);
             var model = new ProductSearchResult()
             {
                 Page = input.Page,
@@ -40,7 +44,12 @@ namespace SV21T1020171.Web.Controllers
                 SearchValue = input.SearchValue ?? "",
                 RowCount = rowCount,
                 Data = data,
+                MinPrice = input.MinPrice,
+                MaxPrice = input.MaxPrice,
+                SupplierID = input.SupplierID,
+                CategoryID = input.CategoryID
                 
+
             };
             ApplicationContext.SetSessionData(SEARCH_CONDITION, input);
             return View(model);

@@ -45,7 +45,7 @@
                     }
                    
                 </select> *@ 
-                @Html.DropDownListFor(m => m.Province, SelectListHelper.Provinces(), new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.Province, SelectListHelper.Provinces(), new { @class = "form-control select2" })
                 @Html.ValidationMessageFor(m=>m.Province) 
             </div>
             <div class="form-group">
