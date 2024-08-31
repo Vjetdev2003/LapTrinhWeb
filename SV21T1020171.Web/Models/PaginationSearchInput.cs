@@ -59,7 +59,7 @@ namespace SV21T1020171.Web.Models
                 if (times.Length == 2)
                 {
                     DateTime? value = Converter.ToDateTime(times[1].Trim());        
-                        value = value.Value.AddMilliseconds(86399998); //86399999
+                        value = value.Value.AddMilliseconds(86399998); //863999995
                     return value;
                 }
                 return null;
