@@ -48,54 +48,69 @@ namespace SV21T1020171.Web.Controllers
         public IActionResult Create()
         {
             ViewBag.Title = "Bổ sung nhà cung cấp";
-            Supplier supplier = new Supplier()
+            var model = new Supplier()
             {
-                SupplierID = 0
+                SupplierID = 0,
+                Logo = "nophoto.png"
             };
-            return View("Edit",supplier);
+            return View("Edit", model);
         }
-      
-       
-        public IActionResult Edit(int id=0)
+
+        public IActionResult Edit(int id = 0)
         {
-            ViewBag.Title = "Cập nhật nhà cung cấp";
+            ViewBag.Title = "Chỉnh sửa nhà cung cấp";
             Supplier? supplier = CommonDataService.GetSupplier(id);
-                    
             if (supplier == null)
+            {
                 return RedirectToAction("Index");
+            }
             return View(supplier);
         }
         [HttpPost]
-        public IActionResult Save(Supplier data)
+        public IActionResult Save(Supplier data, IFormFile? uploadPhoto)
         {
-            ViewBag.Title = data.SupplierID == 0 ? "Bổ sung nhà cung cấp" : "Cập nhật thông tin nhà cung cấp";
-
+            ViewBag.Title = data.SupplierID == 0 ? "Bổ sung nhà cung cấp" : "Cập nhật nhà cung cấp";
             if (string.IsNullOrEmpty(data.SupplierName))
                 ModelState.AddModelError(nameof(data.SupplierName), "Tên nhà cung cấp không được để trống");
-            if (string.IsNullOrEmpty(data.ContactName))
-                ModelState.AddModelError(nameof(data.ContactName), "Tên giao dịch không được để trống");
-            if (string.IsNullOrEmpty(data.Province))
-                ModelState.AddModelError(nameof(data.Province), "Tỉnh/Thành chưa được chọn");
             if (string.IsNullOrEmpty(data.Email))
                 ModelState.AddModelError(nameof(data.Email), "Email không được để trống");
-            if (string.IsNullOrEmpty(data.Phone))
-                ModelState.AddModelError(nameof(data.Phone), "Số điện thoại không được để trống");
             if (string.IsNullOrEmpty(data.Address))
                 ModelState.AddModelError(nameof(data.Address), "Địa chỉ không được để trống");
+            if (string.IsNullOrEmpty(data.Phone))
+                ModelState.AddModelError(nameof(data.Phone), "Số điện thoại không được để trống");
+            if (string.IsNullOrEmpty(data.Province))
+                ModelState.AddModelError(nameof(data.Province), "Tỉnh thành không được để trống");
 
-            if (!ModelState.IsValid) { 
-                return View("Edit",data);
+
+            if (uploadPhoto != null)
+            {
+                string fileName = $"{DateTime.Now.Ticks}_{uploadPhoto.FileName}"; //Tên file sẽ lưu
+                string folder = Path.Combine(ApplicationContext.WebRootPath, @"Images\Supplier"); //đường dẫn đến thư mục lưu file
+                                                                                                  // Kiểm tra và tạo thư mục nếu chưa tồn tại
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+                string filePath = Path.Combine(folder, fileName); //Đường dẫn đến file cần lưu D:\images\supplier\photo.png
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    uploadPhoto.CopyTo(stream);
+                }
+                data.Logo = fileName;
             }
-            //TODO:Ktra dữ liệu đầu vào có hợp lệ hay không
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", data);
+            }
             if (data.SupplierID == 0)
             {
                 CommonDataService.AddSupplier(data);
-                return RedirectToAction("Index");
+
             }
             else
             {
                 CommonDataService.UpdateSupplier(data);
-
             }
             return RedirectToAction("Index");
         }

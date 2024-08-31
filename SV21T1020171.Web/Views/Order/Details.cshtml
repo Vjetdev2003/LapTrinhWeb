@@ -20,23 +20,43 @@
                             @switch (Model.Order.Status)
                             {
                                 case Constants.ORDER_INIT:
-                                    <li><a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a></li>
-                                    <li><a href="~/Order/Accept/@Model.Order.OrderID" onclick="return confirm('Xác nhận duyệt chấp nhận đơn hàng này?')">Duyệt đơn hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Order/Accept/@Model.Order.OrderID" onclick="return confirm('Xác nhận duyệt chấp nhận đơn hàng này?')">Duyệt đơn hàng</a>
+                                    </li>
                                     <li class="divider"></li>
-                                    <li><a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a></li>
-                                    <li><a href="~/Order/Reject/@Model.Order.OrderID" onclick="return confirm('Xác nhận từ chối đơn hàng này?')">Từ chối đơn hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Order/Reject/@Model.Order.OrderID" onclick="return confirm('Xác nhận từ chối đơn hàng này?')">Từ chối đơn hàng</a>
+                                    </li>
                                     break;
                                 case Constants.ORDER_ACCEPTED:
-                                    <li><a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a></li>
-                                    <li><a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">Chuyển giao hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/EditAddress/@Model.Order.OrderID" class="btn btn-modal">Thay đổi địa chỉ giao hàng</a>
+                                        </li>
+                                    <li>
+                                        <a href="~/Order/Shipping/@Model.Order.OrderID" class="btn-modal">Chuyển giao hàng</a>
+                                    </li>
                                     <li class="divider"></li>
-                                    <li><a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a></li>
-                                    <li><a href="~/Order/Reject/@Model.Order.OrderID" onclick="return confirm('Xác nhận từ chối đơn hàng này?')">Từ chối đơn hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                                    </li>
+                                    <li>
+                                        <a href="~/Order/Reject/@Model.Order.OrderID" onclick="return confirm('Xác nhận từ chối đơn hàng này?')">Từ chối đơn hàng</a>
+                                    </li>
                                     break;
                                 case SV21T1020171.DomainModels.Constants.ORDER_SHIPPING:
-                                    <li><a href="~/Order/Finish/@Model.Order.OrderID" onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">Xác nhận hoàn tất đơn hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/Finish/@Model.Order.OrderID" onclick="return confirm('Xác nhận đơn hàng đã hoàn tất thành công?')">Xác nhận hoàn tất đơn hàng</a>
+                                    </li>
                                     <li class="divider"></li>
-                                    <li><a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a></li>
+                                    <li>
+                                        <a href="~/Order/Cancel/@Model.Order.OrderID" onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                                    </li>
                                     break;
                             }
                         </ul>

@@ -23,6 +23,7 @@
             <div class="form-group">
                 <label>Email :</label>
                 <input type="text" class="form-control" name="@nameof(Model.Email)" value="@Model.Email">
+                @Html.ValidationMessage(nameof(Model.Email))
             </div>
             <div class="form-group">
                 <label>Địa chỉ</label>

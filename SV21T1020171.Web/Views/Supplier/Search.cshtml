@@ -9,6 +9,9 @@
             <tr class="bg-primary">
 
                 <th>
+                    Ảnh nhà cung cấp
+                </th>
+                <th>
                     Tên nhà cung cấp
                 </th>
                 <th>
@@ -26,32 +29,39 @@
                 <th>
                     Tỉnh/Thành
                 </th>
-
+                    
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var supplier in Model.Data)
-            {
-                <tr>
-
-                    <td>@supplier.SupplierName</td>
-                    <td>@supplier.ContactName</td>
-                    <td>@supplier.Address</td>
-                    <td>@supplier.Email</td>
-                    <td>@supplier.Phone</td>
-                    <td>@supplier.Province</td>
-
-                    <td class="text-right">
-                        <a href="~/Supplier/Edit/@supplier.SupplierID " class="btn btn-xs btn-info">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a href="~/Supplier/Delete/@supplier.SupplierID " class="btn btn-xs btn-danger">
-                            <i class="fa fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
+            @{
+                foreach (var item in Model.Data)
+                {
+                    <tr>
+                        <td>
+                            <img class="profile-user-img img-responsive img-bordered"
+                                 alt="no-photo"
+                                 src="~/images/Supplier/@(string.IsNullOrWhiteSpace(item.Logo) ? "nophoto.png" : item.Logo)">
+                        </td>
+                        <td>@item.SupplierName</td>
+                        <td>@item.ContactName</td>
+                        <td>@item.Province</td>
+                        <td>@item.Address</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td class="text-right">
+                            <a href="~/Supplier/Edit/@item.SupplierID" class="btn btn-xs btn-info">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="~/Supplier/Delete/@item.SupplierID" class="btn btn-xs btn-danger">
+                                <i class="fa fa-remove"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
             }
+
+
 
         </tbody>
     </table>

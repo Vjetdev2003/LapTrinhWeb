@@ -17,8 +17,8 @@ namespace SV21T1020171.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"INSERT INTO Suppliers(SupplierName,ContactName,Province,Address,Phone,Email)
-                            VALUES(@SupplierName,@ContactName,@Province,@Address,@Phone,@Email);
+                var sql = @"INSERT INTO Suppliers(SupplierName,ContactName,Province,Address,Phone,Email,Logo)
+                            VALUES(@SupplierName,@ContactName,@Province,@Address,@Phone,@Email,@Logo);
                             SELECT @@IDENTITY";
                 var parameters = new
                 {
@@ -28,6 +28,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
+                    Logo = data.Logo ?? ""
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: CommandType.Text);
                 connection.Close();
@@ -116,7 +117,8 @@ namespace SV21T1020171.DataLayers.SQLServer
                           Province=@Province,
                           Address=@Address,
                           Phone = @Phone,
-                          Email=@Email
+                          Email=@Email,
+                          Logo = @Logo
                            WHERE SupplierID=@SupplierID";
                 var parameters = new
                 {
@@ -126,6 +128,7 @@ namespace SV21T1020171.DataLayers.SQLServer
                     Address = data.Address ?? "",
                     Phone = data.Phone ?? "",
                     Email = data.Email ?? "",
+                    Logo =data.Logo ?? "",
                     SupplierId=data.SupplierID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: CommandType.Text) > 0;

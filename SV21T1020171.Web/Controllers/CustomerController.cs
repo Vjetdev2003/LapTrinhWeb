@@ -86,10 +86,10 @@ namespace SV21T1020171.Web.Controllers
             if (string.IsNullOrEmpty(data.ContactName))
                 ModelState.AddModelError(nameof(data.ContactName), "Tên giao dịch không được để trống");
             if (string.IsNullOrEmpty(data.Province))
-                ModelState.AddModelError(nameof(data.Province), "Vui long chọn tỉnh thành");
-
+                ModelState.AddModelError(nameof(data.Province), "Vui lòng chọn tỉnh thành");
+            if (string.IsNullOrEmpty(data.Email))
+                ModelState.AddModelError(nameof(data.Email), "Vui lòng nhập email ");
             data.Phone = data.Phone ?? "";
-            data.Email = data.Email ?? "";
             data.Address = data.Address ?? "";
 
             if (!ModelState.IsValid)
